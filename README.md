@@ -1,6 +1,6 @@
 # The Daily Tech Prophet
 
-An immersive, cinematic technology newspaper styled like the Daily Prophet from Harry Potter — but for AI, programming, cybersecurity, space, startups, and engineering.
+An immersive, cinematic technology newspaper styled like the Daily Prophet — but for AI, programming, cybersecurity, space, startups, and engineering.
 
 > “All the Tech That's Fit to Print”
 
