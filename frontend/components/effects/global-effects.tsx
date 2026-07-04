@@ -1,21 +1,14 @@
 "use client";
 
-import { DustParticles } from "./dust-particles";
-import { InkTrail } from "./ink-trail";
-import { InkReveal } from "./ink-reveal";
-import { PrintNoise } from "./print-noise";
-import { PaperPhysics } from "./paper-physics";
-import { CandleGlow } from "./candle-glow";
-
+/**
+ * GlobalEffects — minimal.
+ *
+ * All previous global effects (candle-glow, paper-physics, ink-trail,
+ * ink-reveal, print-noise, dust-particles) were disabled individually
+ * for performance. Their `.tsx` files now return null; this component
+ * remains in the tree so the layout `<RootLayout>` import still
+ * resolves, but renders no DOM.
+ */
 export function GlobalEffects() {
-  return (
-    <>
-      <CandleGlow />
-      <PaperPhysics />
-      <DustParticles />
-      <InkTrail />
-      <InkReveal />
-      <PrintNoise />
-    </>
-  );
+  return null;
 }
