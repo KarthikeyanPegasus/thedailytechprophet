@@ -11,10 +11,12 @@ FROM node:22-alpine AS builder
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
-# NEXT_PUBLIC_* must be baked in at build time; the runtime API_URL is
-# used for any server-side fetches inside the standalone server.
+# NEXT_PUBLIC_* must be baked in at build time for the client bundle.
+# Railway passes this as a build arg via the buildArgs in railway.json.
+# Also set API_URL as a runtime fallback for server-side fetches.
 ARG NEXT_PUBLIC_API_URL=http://localhost:8080
 ENV NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL}
+ENV API_URL=${NEXT_PUBLIC_API_URL}
 RUN npm run build
 
 # ---- runner: minimal production image ----

@@ -1,6 +1,8 @@
 import type { Article, Category, NewsResponse, WidgetsResponse, SearchResult, ProviderInfo } from "@/types";
 
-const API_BASE = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8080";
+// NEXT_PUBLIC_API_URL is inlined at build time for client-side fetches.
+// API_URL is a runtime fallback for server-side fetches (standalone server).
+const API_BASE = process.env.NEXT_PUBLIC_API_URL || process.env.API_URL || "http://localhost:8080";
 
 // Short-lived in-memory response cache. Avoids re-fetching the same article
 // (or related lists) within a short window during normal navigation.
