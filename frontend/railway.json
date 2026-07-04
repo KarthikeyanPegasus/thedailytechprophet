@@ -3,7 +3,8 @@
   "build": {
     "builder": "DOCKERFILE",
     "dockerfilePath": "Dockerfile",
-    "rootDirectory": "frontend"
+    "rootDirectory": "frontend",
+    "buildArgs": ["NEXT_PUBLIC_API_URL"]
   },
   "deploy": {
     "restartPolicyType": "ON_FAILURE",
