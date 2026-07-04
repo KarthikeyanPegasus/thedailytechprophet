@@ -1,65 +1,46 @@
 "use client";
 
 import * as React from "react";
-
-import { AIBrain } from "./ai-brain";
-import { CyberLock } from "./cyber-lock";
-import { CodeTerminal } from "./code-terminal";
-import { GlobeNetwork } from "./globe-network";
-import { DNASpiral } from "./dna-spiral";
-import { QuantumOrbit } from "./quantum-orbit";
-import { QuantumWave } from "./quantum-wave";
-import { RoboArm } from "./robo-arm";
-import { TelescopeStars } from "./telescope-stars";
-import { PlanetOrbit } from "./planet-orbit";
-import { PhoneHand } from "./phone-hand";
-import { CodeBrackets } from "./code-brackets";
-import { GitBranch } from "./git-branch";
-import { BrainNeural } from "./brain-neural";
-import { ChartBars } from "./chart-bars";
-import { Microscope } from "./microscope";
-import { GameController } from "./game-controller";
-import { F1Racing } from "./f1-racing";
-import { Palette } from "./palette";
-import { Briefcase } from "./briefcase";
-import { Shield } from "./shield";
-import { DollarCoin } from "./dollar-coin";
-import { GraduationCap } from "./graduation-cap";
-import { AnchorShip } from "./anchor-ship";
-import { HandshakeDeal } from "./handshake-deal";
-import { LightbulbIdea } from "./lightbulb-idea";
-import { BlueprintDiagram } from "./blueprint-diagram";
+import dynamic from "next/dynamic";
 
 type IllustrationComponent = React.ComponentType<{ className?: string }>;
 type IllustrationMap = Record<string, IllustrationComponent>;
 
+// Lazy-load blueprint diagram component
+const BlueprintDiagram = dynamic(() =>
+  import("./blueprint-diagram").then((m) => m.BlueprintDiagram),
+);
+
+// Lazy-load illustration components only when needed.
+// This keeps the initial JS bundle small — illustrations are code-split
+// into separate chunks loaded on demand.
 const ILLUSTRATIONS: IllustrationMap = {
-  "ai-brain": AIBrain,
-  "cyber-lock": CyberLock,
-  "code-terminal": CodeTerminal,
-  "globe-network": GlobeNetwork,
-  "dna-spiral": DNASpiral,
-  "quantum-orbit": QuantumOrbit,
-  "quantum-wave": QuantumWave,
-  "robo-arm": RoboArm,
-  "telescope-stars": TelescopeStars,
-  "planet-orbit": PlanetOrbit,
-  "phone-hand": PhoneHand,
-  "code-brackets": CodeBrackets,
-  "git-branch": GitBranch,
-  "brain-neural": BrainNeural,
-  "chart-bars": ChartBars,
-  microscope: Microscope,
-  "game-controller": GameController,
-  "f1-racing": F1Racing,
-  palette: Palette,
-  briefcase: Briefcase,
-  shield: Shield,
-  "dollar-coin": DollarCoin,
-  "graduation-cap": GraduationCap,
-  "anchor-ship": AnchorShip,
-  "handshake-deal": HandshakeDeal,
-  "lightbulb-idea": LightbulbIdea,
+  "ai-brain": dynamic(() => import("./ai-brain").then((m) => m.AIBrain)),
+  "cyber-lock": dynamic(() => import("./cyber-lock").then((m) => m.CyberLock)),
+  "code-terminal": dynamic(() => import("./code-terminal").then((m) => m.CodeTerminal)),
+  "globe-network": dynamic(() => import("./globe-network").then((m) => m.GlobeNetwork)),
+  "dna-spiral": dynamic(() => import("./dna-spiral").then((m) => m.DNASpiral)),
+  "quantum-orbit": dynamic(() => import("./quantum-orbit").then((m) => m.QuantumOrbit)),
+  "quantum-wave": dynamic(() => import("./quantum-wave").then((m) => m.QuantumWave)),
+  "robo-arm": dynamic(() => import("./robo-arm").then((m) => m.RoboArm)),
+  "telescope-stars": dynamic(() => import("./telescope-stars").then((m) => m.TelescopeStars)),
+  "planet-orbit": dynamic(() => import("./planet-orbit").then((m) => m.PlanetOrbit)),
+  "phone-hand": dynamic(() => import("./phone-hand").then((m) => m.PhoneHand)),
+  "code-brackets": dynamic(() => import("./code-brackets").then((m) => m.CodeBrackets)),
+  "git-branch": dynamic(() => import("./git-branch").then((m) => m.GitBranch)),
+  "brain-neural": dynamic(() => import("./brain-neural").then((m) => m.BrainNeural)),
+  "chart-bars": dynamic(() => import("./chart-bars").then((m) => m.ChartBars)),
+  "microscope": dynamic(() => import("./microscope").then((m) => m.Microscope)),
+  "game-controller": dynamic(() => import("./game-controller").then((m) => m.GameController)),
+  "f1-racing": dynamic(() => import("./f1-racing").then((m) => m.F1Racing)),
+  "palette": dynamic(() => import("./palette").then((m) => m.Palette)),
+  "briefcase": dynamic(() => import("./briefcase").then((m) => m.Briefcase)),
+  "shield": dynamic(() => import("./shield").then((m) => m.Shield)),
+  "dollar-coin": dynamic(() => import("./dollar-coin").then((m) => m.DollarCoin)),
+  "graduation-cap": dynamic(() => import("./graduation-cap").then((m) => m.GraduationCap)),
+  "anchor-ship": dynamic(() => import("./anchor-ship").then((m) => m.AnchorShip)),
+  "handshake-deal": dynamic(() => import("./handshake-deal").then((m) => m.HandshakeDeal)),
+  "lightbulb-idea": dynamic(() => import("./lightbulb-idea").then((m) => m.LightbulbIdea)),
 };
 
 const KEYWORD_RULES: { pattern: RegExp; key: keyof typeof ILLUSTRATIONS }[] = [
@@ -217,8 +198,8 @@ export function LivingIllustration({ article, imageUrl, className, alt }: Living
     }
   }
 
-  // Fallback: SVG illustration
-  const Component = ILLUSTRATIONS[key] ?? AIBrain;
+  // Fallback: SVG illustration (lazy-loaded)
+  const Component = ILLUSTRATIONS[key] ?? ILLUSTRATIONS["ai-brain"];
   return (
     <div className="ink-illustration" style={{ width: "100%", height: "100%", position: "relative" }}>
       <Component className="w-full h-full" />

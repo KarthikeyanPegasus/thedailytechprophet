@@ -61,6 +61,26 @@ body {
   color: var(--foreground);
   font-family: var(--font-body);
   overflow-x: hidden;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+/* === MOBILE UTILITY: hidden scrollbar === */
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* === MOBILE UTILITY: minimum 44px touch targets === */
+.touch-target {
+  min-width: 44px;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
 /* === AUTHENTIC AGED PAPER TEXTURE === */
@@ -150,6 +170,13 @@ body {
 .dark .drop-cap::first-letter {
   color: var(--color-dark-gold);
   text-shadow: 2px 1px 0 rgba(255, 168, 64, 0.15);
+}
+
+@media (max-width: 640px) {
+  .drop-cap::first-letter {
+    font-size: 3rem;
+    padding-top: 0.04em;
+  }
 }
 
 /* === ORNAMENTAL DIVIDER === */
@@ -513,6 +540,10 @@ body {
     rgba(0, 0, 0, 0.35) 90%,
     transparent
   );
+}
+
+@media (max-width: 767px) {
+  .paper-crease::after { display: none; }
 }
 
 /* Subtle horizontal fold lines */
@@ -1213,6 +1244,15 @@ body {
 
 .article-hero-figure figure {
   margin: 0 !important;
+}
+
+@media (max-width: 767px) {
+  .article-hero-figure {
+    float: none;
+    width: 100%;
+    max-width: 100%;
+    margin: 0 0 1rem 0;
+  }
 }
 
 @media (min-width: 768px) {

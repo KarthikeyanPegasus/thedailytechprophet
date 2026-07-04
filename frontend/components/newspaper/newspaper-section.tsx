@@ -1,5 +1,6 @@
 "use client";
 
+import { memo } from "react";
 import type { Article } from "@/types";
 import { LivingIllustration } from "@/components/images/illustration-picker";
 import { useLazyIllustration } from "@/hooks/use-lazy-illustration";
@@ -63,20 +64,22 @@ export function NewspaperSection({
   );
 }
 
-function NewspaperStory({
-  article,
-  showImage,
-  variant,
-  compact,
-  isFiller,
-}: {
+interface NewspaperStoryProps {
   article: Article;
   index: number;
   showImage: boolean;
   variant: "front" | "opinion" | "default";
   compact: boolean;
   isFiller: boolean;
-}) {
+}
+
+function NewspaperStoryImpl({
+  article,
+  showImage,
+  variant,
+  compact,
+  isFiller,
+}: NewspaperStoryProps) {
   const excerpt = articleFirstParagraph(article, compact ? 220 : 280);
   const { ref: illRef, shouldRender, isVisible } = useLazyIllustration<HTMLDivElement>();
 
@@ -96,8 +99,7 @@ function NewspaperStory({
   }
 
   return (
-    <article className="newspaper-story-readable break-inside-avoid"
-    >
+    <article className="newspaper-story-readable break-inside-avoid">
       <div className="kicker text-[var(--ink)] mb-1" style={{ fontSize: "0.65rem" }}>
         {article.categories.slice(0, 2).map((cat) => cat.replace(/-/g, " ")).join(" · ")}
       </div>
@@ -139,3 +141,5 @@ function NewspaperStory({
     </article>
   );
 }
+
+const NewspaperStory = memo(NewspaperStoryImpl);

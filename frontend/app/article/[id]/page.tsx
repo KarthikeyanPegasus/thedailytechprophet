@@ -748,37 +748,37 @@ export default function ArticlePage() {
           <div className="flex items-center gap-2">
             <button
               onClick={() => toggleBookmark(article)}
-              className={`p-1.5 border border-[var(--border-color)] transition-colors ${isBookmarked(article.id) ? "bg-gold text-ink" : "hover:bg-gold/10 text-ink-soft"}`}
+              className={`p-2.5 sm:p-1.5 border border-[var(--border-color)] transition-colors touch-target ${isBookmarked(article.id) ? "bg-gold text-ink" : "hover:bg-gold/10 text-ink-soft"}`}
               aria-label="Bookmark"
               title="Bookmark (b)"
               id="bookmark-btn"
             >
-              <Bookmark className={`w-3.5 h-3.5 ${isBookmarked(article.id) ? "fill-current" : ""}`} />
+              <Bookmark className={`w-4 h-4 sm:w-3.5 sm:h-3.5 ${isBookmarked(article.id) ? "fill-current" : ""}`} />
             </button>
             <button
               onClick={handleSpeak}
-              className={`p-1.5 border border-[var(--border-color)] transition-colors ${speaking ? "bg-gold text-ink" : "hover:bg-gold/10 text-ink-soft"}`}
+              className={`p-2.5 sm:p-1.5 border border-[var(--border-color)] transition-colors touch-target ${speaking ? "bg-gold text-ink" : "hover:bg-gold/10 text-ink-soft"}`}
               aria-label={speaking ? "Stop reading" : "Read aloud"}
               title={speaking ? "Stop" : "Read aloud"}
             >
-              {speaking ? <Square className="w-3.5 h-3.5" /> : <Play className="w-3.5 h-3.5" />}
+              {speaking ? <Square className="w-4 h-4 sm:w-3.5 sm:h-3.5" /> : <Play className="w-4 h-4 sm:w-3.5 sm:h-3.5" />}
             </button>
             <div className="inline-flex border border-[var(--border-color)] text-xs font-sans" role="group" aria-label="Reading mode">
               <button
                 onClick={() => handleModeChange("single")}
-                className={`px-2 py-1.5 transition-colors ${readMode === "single" ? "bg-gold text-ink" : "text-ink-soft hover:bg-gold/10"}`}
+                className={`px-3 py-2.5 sm:px-2 sm:py-1.5 transition-colors touch-target ${readMode === "single" ? "bg-gold text-ink" : "text-ink-soft hover:bg-gold/10"}`}
                 aria-pressed={readMode === "single"}
                 title="Single voice"
               >
-                <User className="w-3.5 h-3.5" />
+                <User className="w-4 h-4 sm:w-3.5 sm:h-3.5" />
               </button>
               <button
                 onClick={() => handleModeChange("duet")}
-                className={`px-2 py-1.5 border-l border-[var(--border-color)] transition-colors ${readMode === "duet" ? "bg-gold text-ink" : "text-ink-soft hover:bg-gold/10"}`}
+                className={`px-3 py-2.5 sm:px-2 sm:py-1.5 border-l border-[var(--border-color)] transition-colors touch-target ${readMode === "duet" ? "bg-gold text-ink" : "text-ink-soft hover:bg-gold/10"}`}
                 aria-pressed={readMode === "duet"}
                 title="Duet (Reed + Samantha)"
               >
-                <Users className="w-3.5 h-3.5" />
+                <Users className="w-4 h-4 sm:w-3.5 sm:h-3.5" />
               </button>
             </div>
             <div className="relative">
@@ -788,7 +788,7 @@ export default function ArticlePage() {
                 disabled={availableVoices.length === 0}
                 aria-label="Select voice"
                 title="Select voice"
-                className="max-w-[10rem] truncate bg-transparent border border-[var(--border-color)] text-xs font-sans text-ink-soft py-1.5 pl-2 pr-6 hover:border-gold focus:outline-none focus:border-gold appearance-none bg-no-repeat bg-right disabled:opacity-50"
+                className="max-w-[10rem] truncate bg-transparent border border-[var(--border-color)] text-xs font-sans text-ink-soft py-2.5 pl-2.5 sm:py-1.5 sm:pl-2 pr-8 sm:pr-6 hover:border-gold focus:outline-none focus:border-gold appearance-none bg-no-repeat bg-right disabled:opacity-50"
                 style={{
                   backgroundImage:
                     "url(\"data:image/svg+xml;charset=US-ASCII,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath fill='%23866b4a' d='M0 0l5 6 5-6z'/%3E%3C/svg%3E\")",

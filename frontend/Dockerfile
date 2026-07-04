@@ -11,10 +11,9 @@ FROM node:22-alpine AS builder
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
-# NEXT_PUBLIC_* must be baked in at build time for the client bundle.
-# Railway passes this as a build arg via the buildArgs in railway.json.
-# Also set API_URL as a runtime fallback for server-side fetches.
-ARG NEXT_PUBLIC_API_URL=http://localhost:8080
+# Use a placeholder that gets replaced at container startup.
+# This allows the API URL to be set at runtime without rebuilding.
+ARG NEXT_PUBLIC_API_URL=__NEXT_PUBLIC_API_URL_PLACEHOLDER__
 ENV NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL}
 ENV API_URL=${NEXT_PUBLIC_API_URL}
 RUN npm run build
@@ -44,4 +43,8 @@ EXPOSE 3000
 ENV PORT=3000
 ENV HOSTNAME=0.0.0.0
 
-CMD ["node", "server.js"]
+# At startup, replace the placeholder in all built JS files with the
+# actual NEXT_PUBLIC_API_URL, then start the server.
+# The standalone output puts server chunks under .next/server and
+# client chunks under .next/static — both need substitution.
+CMD ["sh", "-c", "find .next -name '*.js' -type f -exec sed -i 's|__NEXT_PUBLIC_API_URL_PLACEHOLDER__|${NEXT_PUBLIC_API_URL:-http://localhost:8080}|g' {} + && node server.js"]

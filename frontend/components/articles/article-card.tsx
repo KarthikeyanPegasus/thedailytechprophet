@@ -1,7 +1,7 @@
 "use client";
 
+import { memo } from "react";
 import Link from "next/link";
-import { motion } from "framer-motion";
 import type { Article } from "@/types";
 import { LivingIllustration } from "@/components/images/illustration-picker";
 import { useLazyIllustration } from "@/hooks/use-lazy-illustration";
@@ -13,17 +13,13 @@ interface ArticleCardProps {
   index?: number;
 }
 
-export function ArticleCard({ article, variant = "default", index = 0 }: ArticleCardProps) {
+function ArticleCardImpl({ article, variant = "default", index = 0 }: ArticleCardProps) {
   const isCompact = variant === "compact";
   const excerpt = articleFirstParagraph(article, isCompact ? 180 : 240);
   const { ref: illRef, shouldRender, isVisible } = useLazyIllustration<HTMLDivElement>();
 
   return (
-    <motion.article
-      initial={{ opacity: 0 }}
-      whileInView={{ opacity: 1 }}
-      viewport={{ once: true }}
-      transition={{ duration: 0.35, delay: Math.min(index * 0.03, 0.3) }}
+    <article
       className="newspaper-story break-inside-avoid"
     >
       <p className="kicker text-[var(--ink)] mb-0.5">
@@ -62,6 +58,8 @@ export function ArticleCard({ article, variant = "default", index = 0 }: Article
         <span>By {article.author}</span>
         <span>{timeAgo(article.published_at)} · {article.read_time}m</span>
       </p>
-    </motion.article>
+    </article>
   );
 }
+
+export const ArticleCard = memo(ArticleCardImpl);

@@ -72,6 +72,14 @@ export function Masthead() {
           </motion.div>
         </div>
       </div>
+
+      {/* Mobile utility row — search, sound, archive (hidden on desktop) */}
+      <div className="flex lg:hidden items-center justify-center gap-3 border-t border-[var(--border-color)] py-2 px-4">
+        <SearchButton />
+        <SoundManager />
+        <NewspaperArchive />
+      </div>
+
       <DateBanner />
       <BreakingTicker />
     </header>
