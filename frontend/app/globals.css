@@ -1,0 +1,2329 @@
+@import "tailwindcss";
+
+@theme {
+  /* === NEWSPAPER TYPOGRAPHY === */
+  --font-display: "Playfair Display", Georgia, "Times New Roman", serif;
+  --font-headline: "UnifrakturCook", "Playfair Display", Georgia, serif;
+  --font-body: "EB Garamond", Georgia, "Times New Roman", serif;
+  --font-sans: "Inter", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", "Courier New", monospace;
+  --font-old: "Old Standard TT", Georgia, serif;
+
+  /* === AGED NEWSPAPER PALETTE === */
+  --color-parchment: #f3e9d0;
+  --color-parchment-light: #f9f2e3;
+  --color-parchment-dark: #e6d8b6;
+  --color-parchment-aged: #dcc9a6;
+  --color-ink: #150f0a;
+  --color-ink-soft: #3a2a1a;
+  --color-ink-faded: #6b5643;
+  --color-gold: #a67c2e;
+  --color-gold-bright: #c9a03f;
+  --color-gold-deep: #7a5a1c;
+  --color-brown-deep: #3d2412;
+  --color-brown: #5c3a22;
+  --color-brown-light: #8b6b4a;
+  --color-rust: #7a3f10;
+  --color-sepia: #6b4423;
+  --color-cream: #fbf6eb;
+  --color-border-ink: #2a1c10;
+  --color-candle: #ff9a35;
+
+  /* === DARK MODE (CANDLELIGHT) === */
+  --color-dark-paper: #23180c;
+  --color-dark-paper-light: #332414;
+  --color-dark-ink: #f0ddbc;
+  --color-dark-ink-soft: #c9b18a;
+  --color-dark-gold: #d4a84a;
+  --color-dark-candle-glow: #ffb84d;
+}
+
+:root {
+  --background: var(--color-parchment);
+  --foreground: var(--color-ink);
+  --paper-bg: var(--color-parchment);
+  --paper-text: var(--color-ink);
+  --accent: var(--color-gold);
+  --border-color: var(--color-brown);
+}
+
+.dark {
+  --background: var(--color-dark-paper);
+  --foreground: var(--color-dark-ink);
+  --paper-bg: var(--color-dark-paper);
+  --paper-text: var(--color-dark-ink);
+  --accent: var(--color-dark-gold);
+  --border-color: var(--color-dark-ink-soft);
+}
+
+body {
+  background-color: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-body);
+  overflow-x: hidden;
+}
+
+/* === AUTHENTIC AGED PAPER TEXTURE === */
+.paper-texture {
+  background-color: var(--paper-bg);
+  background-image:
+    /* Top-left light aging */
+    radial-gradient(ellipse at 15% 10%, rgba(120, 90, 40, 0.08) 0%, transparent 45%),
+    /* Bottom-right aging */
+    radial-gradient(ellipse at 85% 90%, rgba(100, 70, 35, 0.07) 0%, transparent 50%),
+    /* Center warmth */
+    radial-gradient(ellipse at 50% 50%, rgba(200, 170, 100, 0.03) 0%, transparent 70%),
+    /* Paper grain noise */
+    url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3CfeComponentTransfer%3E%3CfeFuncA type='linear' slope='0.15'/%3E%3C/feComponentTransfer%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+}
+
+.dark .paper-texture {
+  background-color: var(--color-dark-paper);
+  background-image:
+    radial-gradient(ellipse at 20% 20%, rgba(255, 168, 64, 0.04) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 80%, rgba(212, 168, 71, 0.03) 0%, transparent 50%),
+    url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3CfeComponentTransfer%3E%3CfeFuncA type='linear' slope='0.08'/%3E%3C/feComponentTransfer%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+}
+
+/* === PAPER EDGES / VIGNETTE === */
+.paper-edges {
+  box-shadow:
+    inset 0 0 120px rgba(80, 50, 20, 0.08),
+    inset 0 0 220px rgba(100, 70, 30, 0.04);
+}
+
+.dark .paper-edges {
+  box-shadow:
+    inset 0 0 140px rgba(0, 0, 0, 0.6),
+    inset 0 0 240px rgba(255, 168, 64, 0.03);
+}
+
+/* === NEWSPAPER COLUMNS === */
+.news-columns {
+  column-count: 3;
+  column-gap: 2rem;
+  column-rule: 1px solid var(--border-color);
+  text-align: justify;
+  hyphens: auto;
+}
+
+.news-columns-2 {
+  column-count: 2;
+  column-gap: 2rem;
+  column-rule: 1px solid var(--border-color);
+  text-align: justify;
+  hyphens: auto;
+}
+
+.news-columns-3 {
+  column-count: 3;
+  column-gap: 1.5rem;
+  column-rule: 1px solid var(--border-color);
+  text-align: justify;
+  hyphens: auto;
+}
+
+@media (max-width: 1024px) {
+  .news-columns { column-count: 2; }
+  .news-columns-3 { column-count: 2; }
+}
+
+@media (max-width: 768px) {
+  .news-columns,
+  .news-columns-2,
+  .news-columns-3 { column-count: 1; }
+}
+
+/* === DROP CAP === */
+.drop-cap::first-letter {
+  float: left;
+  font-family: var(--font-display);
+  font-size: 5rem;
+  line-height: 0.85;
+  padding-right: 0.08em;
+  padding-top: 0.08em;
+  color: var(--color-brown-deep);
+  font-weight: 900;
+  text-shadow: 2px 1px 0 rgba(0,0,0,0.1);
+}
+
+.dark .drop-cap::first-letter {
+  color: var(--color-dark-gold);
+  text-shadow: 2px 1px 0 rgba(255, 168, 64, 0.15);
+}
+
+/* === ORNAMENTAL DIVIDER === */
+.ornament-divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  margin: 2.5rem 0;
+}
+
+.ornament-divider::before,
+.ornament-divider::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--border-color) 20%, var(--border-color) 80%, transparent);
+}
+
+/* === VICTORIAN BORDERS === */
+.victorian-border {
+  border: 3px double var(--border-color);
+  position: relative;
+}
+
+.victorian-border::before {
+  content: "";
+  position: absolute;
+  inset: 5px;
+  border: 1px solid var(--border-color);
+  opacity: 0.35;
+  pointer-events: none;
+}
+
+.ink-border {
+  border: 1px solid var(--border-color);
+  box-shadow: 2px 2px 0 0 rgba(74, 44, 26, 0.15);
+}
+
+.dark .ink-border {
+  box-shadow: 2px 2px 0 0 rgba(0, 0, 0, 0.4);
+}
+
+/* === HEADLINE STYLES === */
+.headline-masthead {
+  font-family: var(--font-display);
+  font-weight: 900;
+  letter-spacing: -0.02em;
+  line-height: 0.88;
+  text-shadow: 2px 2px 0 rgba(0,0,0,0.08);
+}
+
+.headline-article {
+  font-family: var(--font-display);
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.02em;
+}
+
+.headline-section {
+  font-family: var(--font-display);
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+/* Blackletter masthead variant */
+.headline-gothic {
+  font-family: var(--font-headline);
+  font-weight: 400;
+  letter-spacing: 0.01em;
+  line-height: 0.9;
+}
+
+/* === INK LINKS === */
+.ink-link {
+  position: relative;
+  text-decoration: none;
+  border-bottom: 1px solid currentColor;
+  transition: color 0.2s ease;
+}
+
+.ink-link::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -1px;
+  width: 100%;
+  height: 1px;
+  background: var(--color-gold);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.3s ease;
+}
+
+.ink-link:hover::after {
+  transform: scaleX(1);
+}
+
+/* === VINTAGE CARD — deprecated, kept for compat === */
+.vintage-card {
+  background: var(--paper-bg);
+  border: 1px solid var(--border-color);
+  padding: 1rem;
+  position: relative;
+}
+
+/* === NEWSPAPER SECTION BREAK / PAGE TURN === */
+.newspaper-section-break {
+  border-top: 4px double var(--border-color);
+  border-bottom: 1px solid var(--border-color);
+  height: 5px;
+  margin: 2rem 0 1.5rem 0;
+  position: relative;
+}
+
+.newspaper-section-break::after {
+  content: attr(data-page);
+  position: absolute;
+  top: -0.75rem;
+  right: 0;
+  background: var(--paper-bg);
+  padding-left: 0.5rem;
+  font-family: var(--font-sans);
+  font-size: 0.65rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: var(--color-ink-faded);
+}
+
+/* Section banner with page number embedded */
+.newspaper-section-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-top: 4px double var(--border-color);
+  border-bottom: 1px solid var(--border-color);
+  padding: 0.4rem 0;
+  margin-bottom: 1rem;
+}
+
+.newspaper-section-banner .banner-title {
+  font-family: var(--font-display);
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 1.1rem;
+  color: var(--color-ink);
+}
+
+.newspaper-section-banner .banner-page {
+  font-family: var(--font-sans);
+  font-size: 0.65rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: var(--color-ink-faded);
+}
+
+/* === CANDLE GLOW === */
+.candle-glow {
+  position: fixed;
+  pointer-events: none;
+  z-index: 9999;
+  width: 420px;
+  height: 420px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 169, 64, 0.07) 0%, transparent 70%);
+  transition: opacity 0.3s ease;
+}
+
+.dark .candle-glow {
+  background: radial-gradient(circle, rgba(255, 184, 77, 0.11) 0%, transparent 60%);
+}
+
+/* === INK TRAIL === */
+.ink-trail-canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 9998;
+  opacity: 0.35;
+}
+
+/* === DUST PARTICLES === */
+.dust-particles {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+  overflow: hidden;
+}
+
+.dust-mote {
+  position: absolute;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(212, 168, 71, 0.55), transparent);
+  pointer-events: none;
+}
+
+.dark .dust-mote {
+  background: radial-gradient(circle, rgba(255, 184, 77, 0.45), transparent);
+}
+
+/* === SCROLLBAR === */
+::-webkit-scrollbar { width: 10px; }
+::-webkit-scrollbar-track { background: var(--paper-bg); }
+::-webkit-scrollbar-thumb {
+  background: var(--color-brown);
+  border-radius: 0;
+  border: 2px solid var(--paper-bg);
+}
+::-webkit-scrollbar-thumb:hover { background: var(--color-brown-deep); }
+
+/* === PRINT MODE === */
+@media print {
+  .dust-particles, .candle-glow, .ink-trail-canvas { display: none !important; }
+  body { background: white !important; color: black !important; }
+  .paper-texture { background: white !important; }
+  .no-print { display: none !important; }
+}
+
+/* === REDUCED MOTION === */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* === TICKER === */
+@keyframes ticker-scroll {
+  0% { transform: translateX(100%); }
+  100% { transform: translateX(-100%); }
+}
+
+.ticker-track {
+  display: inline-flex;
+  white-space: nowrap;
+  animation: ticker-scroll 80s linear infinite;
+}
+
+.ticker-track:hover {
+  animation-play-state: paused;
+}
+
+/* === SELECTION === */
+::selection {
+  background: var(--color-gold);
+  color: var(--color-ink);
+}
+
+.dark ::selection {
+  background: var(--color-dark-gold);
+  color: var(--color-dark-paper);
+}
+
+/* === UTILITY === */
+.text-gold { color: var(--color-gold); }
+.text-sepia { color: var(--color-sepia); }
+.text-ink { color: var(--color-ink); }
+.text-ink-soft { color: var(--color-ink-soft); }
+.text-ink-faded { color: var(--color-ink-faded); }
+.text-brown { color: var(--color-brown); }
+.bg-ink { background-color: var(--color-ink); }
+.bg-gold { background-color: var(--color-gold); }
+.bg-parchment { background-color: var(--color-parchment); }
+.border-ink { border-color: var(--border-color); }
+.font-display { font-family: var(--font-display); }
+.font-headline { font-family: var(--font-headline); }
+.font-body { font-family: var(--font-body); }
+
+.dark .text-gold { color: var(--color-dark-gold); }
+.dark .text-ink { color: var(--color-dark-ink); }
+.dark .text-ink-soft { color: var(--color-dark-ink-soft); }
+
+/* === NEWSPAPER EXTRAS === */
+.newspaper-rule {
+  border-top: 1px solid var(--border-color);
+  border-bottom: 1px solid var(--border-color);
+  height: 3px;
+  background: repeating-linear-gradient(90deg, var(--border-color) 0, var(--border-color) 1px, transparent 1px, transparent 6px);
+  opacity: 0.4;
+}
+
+.newspaper-label {
+  font-family: var(--font-sans);
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: var(--color-gold);
+  border: 1px solid var(--color-gold);
+  padding: 0.15rem 0.4rem;
+  display: inline-block;
+}
+
+.newspaper-stamp {
+  font-family: var(--font-headline);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  color: var(--color-rust);
+  border: 2px solid var(--color-rust);
+  padding: 0.15rem 0.5rem;
+  transform: rotate(-2deg);
+  display: inline-block;
+}
+
+/* === AUTHENTIC DAILY PROPHET EXTRAS === */
+
+/* Footer masthead silhouette — large outlined "The Daily Tech Prophet" wordmark
+   sitting behind the footer content as a decorative background. */
+.footer-silhouette {
+  isolation: isolate;
+}
+.footer-silhouette-text {
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(62, 39, 22, 0.12);
+  text-stroke: 1px rgba(62, 39, 22, 0.12);
+  letter-spacing: -0.02em;
+  transform: translateY(2%);
+  user-select: none;
+  opacity: 0.7;
+  mix-blend-mode: multiply;
+}
+.dark .footer-silhouette-text {
+  -webkit-text-stroke: 1px rgba(230, 220, 200, 0.07);
+  text-stroke: 1px rgba(230, 220, 200, 0.07);
+  mix-blend-mode: screen;
+  opacity: 0.6;
+}
+
+/* Paper fold / crease running down the page */
+.paper-crease {
+  position: relative;
+}
+.paper-crease::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: 1px;
+  background: linear-gradient(
+    to bottom,
+    transparent,
+    rgba(62, 39, 22, 0.08) 10%,
+    rgba(62, 39, 22, 0.15) 45%,
+    rgba(62, 39, 22, 0.08) 90%,
+    transparent
+  );
+  box-shadow: 0 0 6px rgba(62, 39, 22, 0.08);
+  pointer-events: none;
+  z-index: 1;
+}
+.dark .paper-crease::after {
+  background: linear-gradient(
+    to bottom,
+    transparent,
+    rgba(0, 0, 0, 0.35) 10%,
+    rgba(0, 0, 0, 0.55) 45%,
+    rgba(0, 0, 0, 0.35) 90%,
+    transparent
+  );
+}
+
+/* Subtle horizontal fold lines */
+.fold-line {
+  position: relative;
+}
+.fold-line::before {
+  content: "";
+  position: absolute;
+  left: 5%;
+  right: 5%;
+  top: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(62, 39, 22, 0.1), transparent);
+  box-shadow: 0 1px 2px rgba(62, 39, 22, 0.05);
+  pointer-events: none;
+}
+.dark .fold-line::before {
+  background: linear-gradient(90deg, transparent, rgba(0, 0, 0, 0.35), transparent);
+}
+
+/* Torn / feathered paper edge */
+.torn-edge {
+  position: relative;
+}
+.torn-edge::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -8px;
+  height: 10px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 20' preserveAspectRatio='none'%3E%3Cpath d='M0,0 Q15,8 30,3 T60,5 T90,2 T120,6 T150,4 T180,7 T210,3 T240,5 T270,2 T300,6 T330,4 T360,7 T390,3 T420,5 T450,2 T480,6 T510,4 T540,7 T570,3 T600,5 T630,2 T660,6 T690,4 T720,7 T750,3 T780,5 T810,2 T840,6 T870,4 T900,7 T930,3 T960,5 T990,2 T1020,6 T1050,4 T1080,7 T1110,3 T1140,5 T1170,2 T1200,6 L1200,20 L0,20 Z' fill='%23dcc9a6' opacity='0.85'/%3E%3C/svg%3E");
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  opacity: 0.7;
+  pointer-events: none;
+}
+
+/* Page corner curl */
+.corner-curl {
+  position: relative;
+  background: var(--paper-bg);
+}
+.corner-curl::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 36px;
+  height: 36px;
+  background: linear-gradient(135deg, transparent 50%, rgba(62, 39, 22, 0.18) 50%, rgba(62, 39, 22, 0.35));
+  border-top-left-radius: 8px;
+  box-shadow: -2px -2px 4px rgba(62, 39, 22, 0.08);
+  pointer-events: none;
+}
+.dark .corner-curl::after {
+  background: linear-gradient(135deg, transparent 50%, rgba(0, 0, 0, 0.45) 50%, rgba(0, 0, 0, 0.7));
+}
+
+/* Page number footnote style */
+.page-marker {
+  font-family: var(--font-sans);
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--color-ink-faded);
+  border-top: 1px solid var(--border-color);
+  padding-top: 0.5rem;
+  display: block;
+}
+.dark .page-marker {
+  color: var(--color-dark-ink-soft);
+}
+
+/* Continued on page marker */
+.continued-marker {
+  font-family: var(--font-sans);
+  font-size: 0.7rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--color-gold);
+  text-align: right;
+  margin-top: 0.5rem;
+}
+.continued-marker::before {
+  content: "✦ ";
+  color: var(--color-ink-faded);
+}
+
+/* Handwritten marginal note */
+.marginalia {
+  font-family: var(--font-old);
+  font-style: italic;
+  font-size: 0.85rem;
+  line-height: 1.4;
+  color: var(--color-rust);
+  border-left: 2px solid var(--color-rust);
+  padding-left: 0.75rem;
+  position: relative;
+}
+.marginalia::before {
+  content: "✍";
+  position: absolute;
+  left: -1.25rem;
+  top: -0.1rem;
+  font-size: 0.9rem;
+  opacity: 0.6;
+}
+.dark .marginalia {
+  color: var(--color-dark-gold);
+  border-left-color: var(--color-dark-gold);
+}
+
+/* Pull quote like a reporter's note pinned to the page */
+.pull-quote {
+  font-family: var(--font-display);
+  font-size: 1.35rem;
+  line-height: 1.25;
+  font-weight: 700;
+  text-align: center;
+  color: var(--color-brown-deep);
+  padding: 1rem 1.25rem;
+  border-top: 3px double var(--border-color);
+  border-bottom: 3px double var(--border-color);
+  margin: 1.25rem 0;
+  position: relative;
+}
+.pull-quote::before,
+.pull-quote::after {
+  content: "❧";
+  position: absolute;
+  font-size: 0.8rem;
+  color: var(--color-gold);
+}
+.pull-quote::before {
+  top: -0.65rem;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--paper-bg);
+  padding: 0 0.5rem;
+}
+.pull-quote::after {
+  bottom: -0.65rem;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--paper-bg);
+  padding: 0 0.5rem;
+}
+.dark .pull-quote {
+  color: var(--color-dark-ink);
+}
+
+/* Dateline style */
+.dateline {
+  font-family: var(--font-sans);
+  font-size: 0.7rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--color-ink-faded);
+}
+.dateline strong {
+  color: var(--color-ink);
+}
+
+/* Moving picture label */
+.moving-picture-label {
+  font-family: var(--font-headline);
+  font-size: 0.65rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-rust);
+}
+
+/* Ink splatter decoration */
+.ink-splatter {
+  position: absolute;
+  width: 120px;
+  height: 120px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath fill='%23150f0a' opacity='0.08' d='M50,10 C55,15 48,22 52,28 C58,32 65,25 68,32 C70,38 62,42 65,48 C70,52 78,48 80,55 C81,62 72,63 74,70 C76,77 65,78 62,72 C58,78 50,75 46,80 C42,86 35,82 34,75 C28,78 22,72 25,66 C18,65 16,58 22,54 C17,50 18,42 25,40 C22,34 28,28 34,30 C35,23 44,22 46,28 C48,22 47,14 50,10 Z'/%3E%3C/svg%3E");
+  background-size: contain;
+  background-repeat: no-repeat;
+  pointer-events: none;
+  opacity: 0.6;
+}
+.dark .ink-splatter {
+  opacity: 0.25;
+  filter: invert(1);
+}
+
+/* Newspaper column gap fix */
+.newspaper-flow {
+  column-rule: 1px solid var(--border-color);
+}
+.newspaper-flow > * {
+  break-inside: avoid;
+}
+
+/* Authentically uneven columns for front page */
+.front-page-spread {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+}
+@media (min-width: 1024px) {
+  .front-page-spread {
+    grid-template-columns: 2fr 1fr;
+    gap: 2.5rem;
+  }
+  .front-page-spread .main-column {
+    column-count: 3;
+    column-gap: 1.75rem;
+    column-rule: 1px solid var(--border-color);
+  }
+  .front-page-spread .side-column {
+    column-count: 1;
+  }
+}
+@media (min-width: 1280px) {
+  .front-page-spread .main-column {
+    column-count: 4;
+  }
+}
+
+/* Article size variants */
+.story-span-2 {
+  column-span: all;
+}
+.story-large h3 {
+  font-size: 1.65rem;
+  line-height: 1;
+}
+.story-small h3 {
+  font-size: 1.05rem;
+}
+.story-tiny {
+  font-size: 0.9rem;
+}
+.story-tiny h3 {
+  font-size: 0.95rem;
+}
+
+/* Victorian corner ornaments */
+.corner-ornament {
+  position: relative;
+}
+.corner-ornament::before,
+.corner-ornament::after {
+  content: "❖";
+  position: absolute;
+  top: -0.65rem;
+  font-size: 0.75rem;
+  color: var(--color-gold);
+}
+.corner-ornament::before { left: -0.25rem; }
+.corner-ornament::after { right: -0.25rem; }
+
+/* === NEWSPAPER STORY — no card, rule-separated, dense === */
+.newspaper-story {
+  padding: 0 0 0.75rem 0;
+  margin-bottom: 0.75rem;
+  border-bottom: 1px solid var(--border-color);
+  position: relative;
+}
+
+.newspaper-story:last-child {
+  border-bottom: none;
+}
+
+/* Headline spanning all columns — above the fold */
+.headline-span-all {
+  column-span: all;
+  margin-bottom: 0.5rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 4px double var(--border-color);
+}
+
+/* Thick above-the-fold double rule */
+.above-fold-rule {
+  border-top: 4px double var(--border-color);
+  border-bottom: 1px solid var(--border-color);
+  height: 5px;
+  margin: 1.5rem 0;
+}
+
+/* Dateline lead — bold city prefix */
+.dateline-lead {
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  line-height: 1.55;
+  text-align: justify;
+  hyphens: auto;
+}
+
+.dateline-lead::first-letter {
+  font-weight: 900;
+}
+
+.dateline-prefix {
+  font-family: var(--font-sans);
+  font-size: 0.7rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-right: 0.35em;
+}
+
+/* Newspaper section navigation — dense, rule-separated text links */
+.newspaper-nav {
+  display: flex;
+  align-items: stretch;
+  gap: 0;
+  overflow-x: auto;
+  white-space: nowrap;
+}
+
+.newspaper-nav-link {
+  font-family: var(--font-sans);
+  font-size: 0.7rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  padding: 0.4rem 0.85rem;
+  color: var(--foreground);
+  text-decoration: none;
+  border-right: 1px solid var(--border-color);
+  transition: background-color 0.15s ease;
+  display: flex;
+  align-items: center;
+}
+
+.newspaper-nav-link:first-child {
+  border-left: 1px solid var(--border-color);
+}
+
+.newspaper-nav-link:hover {
+  background: rgba(166, 124, 46, 0.12);
+}
+
+.newspaper-nav-link.active {
+  background: var(--color-ink);
+  color: var(--color-parchment);
+}
+
+/* Tighter newspaper flow */
+.newspaper-flow-tight {
+  column-gap: 1.25rem;
+  column-rule: 1px solid var(--border-color);
+  text-align: justify;
+  hyphens: auto;
+  overflow: clip;
+}
+
+.newspaper-flow-tight > * {
+  break-inside: avoid;
+}
+
+/* Newspaper sidebar block — rule-bordered, no card background */
+.newspaper-block {
+  border: 1px solid var(--border-color);
+  padding: 0.85rem 1rem;
+  position: relative;
+}
+
+.newspaper-block + .newspaper-block {
+  margin-top: 0.75rem;
+}
+
+/* Tighter newspaper columns */
+.newspaper-columns-tight {
+  column-count: 1;
+  column-gap: 1.25rem;
+  column-rule: 1px solid var(--border-color);
+  text-align: justify;
+  hyphens: auto;
+  overflow: clip;
+}
+
+@media (min-width: 768px) {
+  .newspaper-columns-tight { column-count: 2; }
+}
+
+@media (min-width: 1024px) {
+  .newspaper-columns-tight { column-count: 3; }
+}
+
+/* Readable newspaper flow — balanced columns, comfortable text */
+.newspaper-flow-readable {
+  column-gap: 1.25rem;
+  column-rule: 1px solid var(--border-color);
+  text-align: justify;
+  hyphens: auto;
+  column-fill: balance;
+}
+
+.newspaper-flow-readable > * {
+  break-inside: avoid;
+}
+
+@media (min-width: 768px) {
+  .newspaper-flow-readable { column-count: 2; }
+}
+
+@media (min-width: 1024px) {
+  .newspaper-flow-readable { column-count: 3; }
+}
+
+@media (min-width: 1280px) {
+  .newspaper-flow-readable { column-count: 4; }
+}
+
+@media (max-width: 640px) {
+  .newspaper-flow-readable { column-count: 1; }
+}
+
+/* Readable story — enough padding to breathe, clear separation */
+.newspaper-story-readable {
+  padding: 0 0 0.6rem 0;
+  margin-bottom: 0.6rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.newspaper-story-readable:last-child {
+  border-bottom: none;
+}
+
+/* Filler story — headline and byline only, used sparingly to plug column gaps */
+.newspaper-filler {
+  padding: 0.35rem 0;
+  margin-bottom: 0.5rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.newspaper-filler:last-child {
+  border-bottom: none;
+}
+
+.newspaper-filler .filler-title {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 0.9rem;
+  line-height: 1.2;
+  color: var(--color-ink);
+  margin-bottom: 0.2rem;
+}
+
+.newspaper-filler .filler-byline {
+  font-family: var(--font-sans);
+  font-size: 0.6rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--color-ink-faded);
+  font-weight: 700;
+}
+
+/* Compact sidebar block that fits inside columns */
+.newspaper-box {
+  border: 1px solid var(--border-color);
+  padding: 0.6rem 0.75rem;
+  break-inside: avoid;
+  margin-bottom: 0.5rem;
+}
+
+.newspaper-box-title {
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 0.25rem;
+  margin-bottom: 0.4rem;
+  text-align: center;
+}
+
+/* Tighter story rule */
+.newspaper-story-tight {
+  padding: 0 0 0.35rem 0;
+  margin-bottom: 0.35rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.newspaper-story-tight:last-child {
+  border-bottom: none;
+}
+
+/* Inline small advert */
+.newspaper-ad {
+  border: 2px solid var(--border-color);
+  padding: 0.5rem;
+  margin: 0.4rem 0;
+  break-inside: avoid;
+  background: rgba(166, 124, 46, 0.05);
+}
+
+.newspaper-ad .ad-label {
+  font-family: var(--font-sans);
+  font-size: 0.55rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--color-gold);
+  margin-bottom: 0.25rem;
+}
+
+.newspaper-ad .ad-text {
+  font-family: var(--font-body);
+  font-size: 0.75rem;
+  line-height: 1.3;
+  color: var(--color-ink-soft);
+}
+
+/* Lead paragraph / excerpt helpers */
+.excerpt {
+  font-family: var(--font-body);
+  text-align: justify;
+  hyphens: auto;
+}
+
+.excerpt::first-letter {
+  font-weight: 700;
+}
+
+.headline-readable {
+  font-family: var(--font-display);
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  line-height: 1.1;
+  color: var(--color-ink);
+}
+
+.dark .headline-readable {
+  color: var(--color-dark-ink);
+}
+
+/* Floating inline illustration within column text */
+.inline-illustration {
+  float: left;
+  width: 48px;
+  height: 48px;
+  margin: 0.15rem 0.5rem 0.15rem 0;
+  border: 1px solid var(--border-color);
+  overflow: hidden;
+}
+
+/* Text-only byline (no icons) */
+.byline-text {
+  font-family: var(--font-sans);
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-weight: 700;
+  color: var(--color-ink-faded);
+  border-top: 1px solid var(--border-color);
+  padding-top: 0.3rem;
+  margin-top: 0.4rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+
+.dark .byline-text {
+  color: var(--color-dark-ink-soft);
+}
+
+/* Colophon style for footer */
+.colophon {
+  font-family: var(--font-sans);
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  line-height: 1.8;
+  color: var(--color-ink-faded);
+}
+
+.dark .colophon {
+  color: var(--color-dark-ink-soft);
+}
+
+/* Newspaper page header — thick double rules with centered title */
+.page-header {
+  text-align: center;
+  border-top: 4px double var(--border-color);
+  border-bottom: 4px double var(--border-color);
+  padding: 1rem 0;
+  margin-bottom: 1.5rem;
+}
+
+.page-header h1 {
+  font-family: var(--font-display);
+  font-weight: 900;
+  letter-spacing: -0.01em;
+}
+
+.page-header p {
+  font-family: var(--font-body);
+  font-style: italic;
+  font-size: 0.9rem;
+  color: var(--color-ink-soft);
+  margin-top: 0.25rem;
+}
+
+.dark .page-header p {
+  color: var(--color-dark-ink-soft);
+}
+
+/* "Also in this edition" sidebar heading */
+.also-in-edition {
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  border-bottom: 3px double var(--border-color);
+  padding-bottom: 0.35rem;
+  margin-bottom: 0.5rem;
+}
+
+/* === NEWSPAPER OVERHAUL — PRINT-LIKE TYPOGRAPHY === */
+
+/* Multi-column flow for article excerpts */
+.newspaper-columns {
+  column-count: 1;
+  column-gap: 2rem;
+  column-rule: 1px solid var(--border-color);
+}
+
+@media (min-width: 768px) {
+  .newspaper-columns {
+    column-count: 2;
+  }
+}
+
+@media (min-width: 1024px) {
+  .newspaper-columns {
+    column-count: 3;
+  }
+}
+
+/* Display headline */
+.headline {
+  font-family: var(--font-display);
+  font-weight: 900;
+  letter-spacing: -0.01em;
+  line-height: 1.05;
+}
+
+/* Italic deck / subhead */
+.deck {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 400;
+}
+
+/* Small-caps byline */
+.byline {
+  font-family: var(--font-sans);
+  text-transform: uppercase;
+  font-size: 0.65rem;
+  letter-spacing: 0.18em;
+  font-weight: 600;
+}
+
+/* Section kicker (the small label above a headline) */
+.kicker {
+  font-family: var(--font-sans);
+  text-transform: uppercase;
+  font-size: 0.7rem;
+  letter-spacing: 0.2em;
+  font-weight: 700;
+  color: var(--color-ink);
+}
+
+/* Justified body copy */
+.body-text {
+  font-family: var(--font-serif, var(--font-body));
+  font-size: 0.95rem;
+  line-height: 1.55;
+  text-align: justify;
+  hyphens: auto;
+}
+
+/* Newspaper hero image wrap — text flows beside then below */
+.article-hero-wrap {
+  overflow: visible;
+}
+
+.article-hero-figure {
+  float: left;
+  width: 100%;
+  max-width: 22rem;
+  margin: 0 1.25rem 0.75rem 0;
+  break-inside: avoid;
+}
+
+.article-hero-figure figure {
+  margin: 0 !important;
+}
+
+@media (min-width: 768px) {
+  .article-hero-figure {
+    width: 45%;
+  }
+}
+
+@media (min-width: 1024px) {
+  .article-hero-figure {
+    width: 38%;
+  }
+}
+
+/* Body text container for the wrap layout */
+.article-body-wrap {
+  clear: both;
+}
+
+/* Decorative section rule with a centered diamond */
+.section-rule {
+  border-top: 3px double var(--border-color);
+  margin: 2rem 0;
+  position: relative;
+}
+
+.section-rule::before {
+  content: "◆";
+  position: absolute;
+  top: -0.7rem;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--paper-bg);
+  padding: 0 0.75rem;
+  color: var(--color-gold);
+  font-size: 0.875rem;
+}
+
+/* === MAGICAL WORD HIGHLIGHTER (TTS) === */
+.word-highlight {
+  display: inline;
+  position: relative;
+  border-radius: 4px;
+  z-index: 1;
+  padding: 0 0.1em;
+  margin: 0 -0.05em;
+  color: var(--color-brown-deep) !important;
+  background: linear-gradient(180deg, rgba(201, 160, 63, 0.65) 0%, rgba(166, 124, 46, 0.45) 100%);
+  box-shadow:
+    0 0 0 1px rgba(201, 160, 63, 0.55),
+    0 0 10px rgba(201, 160, 63, 0.5),
+    0 0 20px rgba(201, 160, 63, 0.2);
+  animation: magic-pulse 1.1s ease-in-out infinite;
+}
+
+@keyframes magic-pulse {
+  0%, 100% {
+    box-shadow:
+      0 0 0 1px rgba(201, 160, 63, 0.5),
+      0 0 8px rgba(201, 160, 63, 0.45),
+      0 0 16px rgba(201, 160, 63, 0.15);
+    background: linear-gradient(180deg, rgba(201, 160, 63, 0.6) 0%, rgba(166, 124, 46, 0.4) 100%);
+  }
+  50% {
+    box-shadow:
+      0 0 0 1px rgba(201, 160, 63, 0.65),
+      0 0 14px rgba(201, 160, 63, 0.65),
+      0 0 28px rgba(201, 160, 63, 0.3);
+    background: linear-gradient(180deg, rgba(201, 160, 63, 0.75) 0%, rgba(166, 124, 46, 0.55) 100%);
+  }
+}
+
+/* Dark mode highlighter — candle-gold */
+.dark .word-highlight {
+  color: var(--color-dark-paper) !important;
+  background: linear-gradient(180deg, rgba(212, 168, 74, 0.75) 0%, rgba(255, 184, 77, 0.5) 100%);
+  animation: magic-pulse-dark 1.1s ease-in-out infinite;
+}
+
+@keyframes magic-pulse-dark {
+  0%, 100% {
+    box-shadow:
+      0 0 0 1px rgba(212, 168, 74, 0.55),
+      0 0 10px rgba(212, 168, 74, 0.5),
+      0 0 20px rgba(212, 168, 74, 0.2);
+    background: linear-gradient(180deg, rgba(212, 168, 74, 0.7) 0%, rgba(255, 184, 77, 0.45) 100%);
+  }
+  50% {
+    box-shadow:
+      0 0 0 1px rgba(212, 168, 74, 0.75),
+      0 0 16px rgba(212, 168, 74, 0.65),
+      0 0 32px rgba(212, 168, 63, 0.35);
+    background: linear-gradient(180deg, rgba(212, 168, 74, 0.85) 0%, rgba(255, 184, 77, 0.55) 100%);
+  }
+}
+
+/* ============================================================
+   PHASE 1 — MAGICAL NEWSPAPER ENHANCEMENT CSS
+   Every enhancement reinforces the illusion of a living, printed
+   newspaper from the 1920s. No modern UI. No bright colors.
+   ============================================================ */
+
+/* === ENHANCED PAPER TEXTURE — foxing spots, fibers, aged corners === */
+.paper-foxing {
+  position: relative;
+}
+.paper-foxing::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.5;
+  background-image:
+    /* Foxing spots — small brown age marks scattered randomly */
+    radial-gradient(circle at 12% 22%, rgba(120, 80, 30, 0.07) 0%, transparent 1.5%),
+    radial-gradient(circle at 34% 67%, rgba(100, 65, 25, 0.06) 0%, transparent 1.2%),
+    radial-gradient(circle at 56% 14%, rgba(110, 75, 28, 0.05) 0%, transparent 1%),
+    radial-gradient(circle at 73% 45%, rgba(95, 60, 22, 0.06) 0%, transparent 1.3%),
+    radial-gradient(circle at 88% 78%, rgba(120, 80, 30, 0.05) 0%, transparent 1.1%),
+    radial-gradient(circle at 23% 89%, rgba(100, 65, 25, 0.06) 0%, transparent 0.9%),
+    radial-gradient(circle at 67% 92%, rgba(110, 70, 28, 0.04) 0%, transparent 1%),
+    radial-gradient(circle at 45% 38%, rgba(90, 58, 20, 0.04) 0%, transparent 0.8%);
+}
+.dark .paper-foxing::before {
+  opacity: 0.3;
+  background-image:
+    radial-gradient(circle at 12% 22%, rgba(200, 160, 80, 0.03) 0%, transparent 1.5%),
+    radial-gradient(circle at 34% 67%, rgba(190, 150, 70, 0.03) 0%, transparent 1.2%),
+    radial-gradient(circle at 56% 14%, rgba(200, 160, 80, 0.02) 0%, transparent 1%),
+    radial-gradient(circle at 73% 45%, rgba(185, 145, 65, 0.03) 0%, transparent 1.3%),
+    radial-gradient(circle at 88% 78%, rgba(200, 160, 80, 0.02) 0%, transparent 1.1%),
+    radial-gradient(circle at 23% 89%, rgba(190, 150, 70, 0.02) 0%, transparent 0.9%),
+    radial-gradient(circle at 67% 92%, rgba(200, 160, 80, 0.02) 0%, transparent 1%),
+    radial-gradient(circle at 45% 38%, rgba(185, 145, 65, 0.02) 0%, transparent 0.8%);
+}
+
+/* Paper fibers — very subtle hairlike texture */
+.paper-fibers {
+  position: relative;
+}
+.paper-fibers::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.25;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='fiber'%3E%3CfeTurbulence type='turbulence' baseFrequency='0.02 0.4' numOctaves='2' seed='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3CfeComponentTransfer%3E%3CfeFuncA type='linear' slope='0.12'/%3E%3C/feComponentTransfer%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23fiber)'/%3E%3C/svg%3E");
+}
+.dark .paper-fibers::after {
+  opacity: 0.12;
+}
+
+/* Aged corners — slight discoloration near edges */
+.paper-aged-corners {
+  position: relative;
+}
+.paper-aged-corners::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background:
+    radial-gradient(ellipse at 0% 0%, rgba(120, 80, 30, 0.1) 0%, transparent 12%) ,
+    radial-gradient(ellipse at 100% 0%, rgba(110, 70, 25, 0.08) 0%, transparent 10%),
+    radial-gradient(ellipse at 0% 100%, rgba(100, 65, 20, 0.09) 0%, transparent 11%),
+    radial-gradient(ellipse at 100% 100%, rgba(120, 80, 30, 0.07) 0%, transparent 9%);
+}
+.dark .paper-aged-corners::before {
+  background:
+    radial-gradient(ellipse at 0% 0%, rgba(0,0,0,0.25) 0%, transparent 12%),
+    radial-gradient(ellipse at 100% 0%, rgba(0,0,0,0.2) 0%, transparent 10%),
+    radial-gradient(ellipse at 0% 100%, rgba(0,0,0,0.22) 0%, transparent 11%),
+    radial-gradient(ellipse at 100% 100%, rgba(0,0,0,0.18) 0%, transparent 9%);
+}
+
+/* Tiny ink imperfections — random specks */
+.ink-specks {
+  position: relative;
+}
+.ink-specks::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0.15;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='specks'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='3' numOctaves='1' seed='7'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3CfeComponentTransfer%3E%3CfeFuncA type='linear' slope='0.4'/%3E%3C/feComponentTransfer%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23specks)'/%3E%3C/svg%3E");
+  mix-blend-mode: multiply;
+}
+.dark .ink-specks::before {
+  opacity: 0.08;
+  mix-blend-mode: screen;
+}
+
+/* === ILLUSTRATION INK FILTER WRAPPER === */
+/* Makes SVG illustrations look like ink on aged paper */
+.ink-illustration {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  filter:
+    sepia(0.7)
+    contrast(1.4)
+    saturate(0.25)
+    brightness(0.92);
+}
+
+.ink-illustration svg {
+  width: 100% !important;
+  height: 100% !important;
+  display: block;
+}
+
+.ink-illustration::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  /* Halftone dots overlay */
+  background-image:
+    radial-gradient(circle, rgba(74, 44, 26, 0.06) 0.5px, transparent 0.6px);
+  background-size: 4px 4px;
+  mix-blend-mode: multiply;
+  z-index: 1;
+  opacity: 0.6;
+}
+.ink-illustration::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  /* Soft vignette */
+  background: radial-gradient(
+    ellipse at center,
+    transparent 55%,
+    rgba(120, 80, 30, 0.12) 100%
+  );
+  z-index: 2;
+}
+.dark .ink-illustration {
+  filter:
+    sepia(0.4)
+    contrast(1.2)
+    saturate(0.2)
+    brightness(0.85);
+}
+.dark .ink-illustration::after {
+  background-image:
+    radial-gradient(circle, rgba(212, 168, 71, 0.04) 0.5px, transparent 0.6px);
+  mix-blend-mode: screen;
+  opacity: 0.4;
+}
+.dark .ink-illustration::before {
+  background: radial-gradient(
+    ellipse at center,
+    transparent 50%,
+    rgba(0, 0, 0, 0.3) 100%
+  );
+}
+
+/* Torn paper border for illustrations */
+.ink-illustration-frame {
+  border: 1px solid var(--border-color);
+  box-shadow:
+    inset 0 0 3px rgba(74, 44, 26, 0.15),
+    0 1px 0 rgba(74, 44, 26, 0.1);
+  overflow: hidden;
+  background: var(--paper-bg);
+  position: relative;
+}
+.dark .ink-illustration-frame {
+  box-shadow:
+    inset 0 0 3px rgba(0,0,0,0.3),
+    0 1px 0 rgba(0,0,0,0.2);
+}
+
+/* === INK REVEAL ANIMATIONS === */
+
+/* Headline ink spread — text appears as if ink is bleeding onto paper */
+@keyframes ink-spread {
+  0% {
+    opacity: 0;
+    filter: blur(8px);
+    letter-spacing: 0.3em;
+    transform: scaleY(0.85);
+  }
+  30% {
+    opacity: 0.4;
+    filter: blur(3px);
+    letter-spacing: 0.05em;
+  }
+  60% {
+    opacity: 0.8;
+    filter: blur(0.5px);
+  }
+  100% {
+    opacity: 1;
+    filter: blur(0);
+    letter-spacing: normal;
+    transform: scaleY(1);
+  }
+}
+
+.ink-reveal-headline {
+  animation: ink-spread 2.5s ease-out forwards;
+}
+
+/* Dividers draw themselves — horizontal rules extend from center */
+@keyframes draw-rule {
+  0% {
+    transform: scaleX(0);
+    opacity: 0;
+  }
+  100% {
+    transform: scaleX(1);
+    opacity: 1;
+  }
+}
+
+.ink-reveal-rule {
+  transform-origin: center;
+  animation: draw-rule 1.8s ease-out forwards;
+  animation-delay: 0.3s;
+  opacity: 0;
+}
+
+/* Borders animate — frame appears as if being drawn */
+@keyframes draw-border {
+  0% {
+    border-color: transparent;
+    opacity: 0;
+  }
+  20% {
+    opacity: 0.5;
+    border-color: var(--border-color);
+  }
+  100% {
+    border-color: var(--border-color);
+    opacity: 1;
+  }
+}
+
+.ink-reveal-border {
+  animation: draw-border 1.5s ease-out forwards;
+  animation-delay: 0.2s;
+  opacity: 0;
+}
+
+/* Paragraph ink spread — body text fades in as ink absorbs into paper */
+@keyframes ink-absorb {
+  0% {
+    opacity: 0;
+    filter: blur(2px);
+  }
+  100% {
+    opacity: 1;
+    filter: blur(0);
+  }
+}
+
+.ink-reveal-body {
+  animation: ink-absorb 1.5s ease-out forwards;
+  animation-delay: 0.5s;
+  opacity: 0;
+}
+
+/* Section title reveals with ink pool effect */
+@keyframes ink-pool {
+  0% {
+    opacity: 0;
+    transform: scale(0.7) blur(5px);
+  }
+  50% {
+    opacity: 0.5;
+    transform: scale(1.05) blur(2px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) blur(0);
+  }
+}
+
+.ink-reveal-section {
+  animation: ink-pool 2s ease-out forwards;
+  animation-delay: 0.4s;
+  opacity: 0;
+}
+
+/* === PRINTING EFFECTS === */
+
+/* Slight ink misalignment — CMYK-like offset */
+@keyframes ink-misalign {
+  0%, 100% { transform: translate(0, 0); }
+  25% { transform: translate(0.3px, -0.2px); }
+  50% { transform: translate(-0.2px, 0.3px); }
+  75% { transform: translate(0.2px, 0.2px); }
+}
+
+.print-misalign {
+  animation: ink-misalign 12s ease-in-out infinite;
+}
+
+/* Printing noise — very subtle random opacity flicker */
+@keyframes print-noise-flicker {
+  0%, 100% { opacity: 1; }
+  47% { opacity: 0.998; }
+  53% { opacity: 0.995; }
+  67% { opacity: 0.997; }
+  73% { opacity: 0.992; }
+  89% { opacity: 0.996; }
+}
+
+.print-noise {
+  animation: print-noise-flicker 8s steps(1) infinite;
+}
+
+/* Faded letter — occasional letter looks lighter, as if ink ran thin */
+.faded-letter {
+  opacity: 0.62;
+  text-shadow: 0 0 0.5px currentColor;
+}
+
+/* Ink bleed — text spreads slightly, like ink soaking into paper */
+.ink-bleed-text {
+  text-shadow:
+    0.3px 0 0 currentColor,
+    -0.2px 0.0 0 currentColor,
+    0 0.3px 0 currentColor;
+}
+
+/* Uneven ink density — body text has subtle weight variation */
+.uneven-ink {
+  -webkit-text-stroke: 0.2px currentColor;
+}
+
+/* Micro ink bleeding on borders */
+.ink-bleed-border {
+  box-shadow:
+    0 0 0 0.5px rgba(74, 44, 26, 0.12),
+    0.5px 0.5px 0 0 rgba(74, 44, 26, 0.06),
+    -0.3px -0.3px 0 0 rgba(74, 44, 26, 0.05);
+}
+.dark .ink-bleed-border {
+  box-shadow:
+    0 0 0 0.5px rgba(0, 0, 0, 0.2),
+    0.5px 0.5px 0 0 rgba(0, 0, 0, 0.1);
+}
+
+/* === PAPER PHYSICS === */
+
+/* Paper surface — GPU-friendly transform only, no 3D */
+.paper-3d-surface {
+  will-change: transform;
+}
+
+/* === NEWSPAPER SEARCH CURSOR === */
+
+/* Custom typewriter/newspaper insertion point cursor */
+.archive-input {
+  caret-color: var(--color-brown-deep);
+}
+.archive-input::selection {
+  background: rgba(166, 124, 46, 0.25);
+  color: var(--color-ink);
+}
+.dark .archive-input {
+  caret-color: var(--color-dark-gold);
+}
+.dark .archive-input::selection {
+  background: rgba(212, 168, 71, 0.25);
+  color: var(--color-dark-ink);
+}
+
+/* Animated quill caret — thicker, ink-like insertion point */
+@keyframes quill-blink {
+  0%, 49% { opacity: 1; }
+  50%, 100% { opacity: 0; }
+}
+
+.quill-caret {
+  display: inline-block;
+  width: 2px;
+  height: 1.2em;
+  background: var(--color-brown-deep);
+  margin-left: 2px;
+  vertical-align: text-bottom;
+  animation: quill-blink 0.8s steps(1) infinite;
+}
+
+/* === FOOTNOTE & FIGURE STYLES === */
+
+.footnote {
+  font-family: var(--font-sans);
+  font-size: 0.65rem;
+  line-height: 1.45;
+  color: var(--color-ink-faded);
+  border-top: 1px solid var(--border-color);
+  padding-top: 0.5rem;
+  margin-top: 1.5rem;
+  display: flex;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+  text-align: left;
+}
+.dark .footnote {
+  color: var(--color-dark-ink-soft);
+}
+
+.footnote-item {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.3rem;
+}
+
+.footnote-marker {
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: 0.7rem;
+  color: var(--color-gold);
+  flex-shrink: 0;
+}
+.dark .footnote-marker {
+  color: var(--color-dark-gold);
+}
+
+/* Figure caption — "FIG. I — [description]" */
+.figure-caption {
+  font-family: var(--font-sans);
+  font-size: 0.6rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--color-ink-faded);
+  text-align: center;
+  margin-top: 0.4rem;
+  line-height: 1.4;
+}
+.dark .figure-caption {
+  color: var(--color-dark-ink-soft);
+}
+
+.figure-number {
+  font-family: var(--font-display);
+  font-weight: 800;
+  color: var(--color-gold);
+  letter-spacing: 0.05em;
+}
+.dark .figure-number {
+  color: var(--color-dark-gold);
+}
+
+/* Old newspaper reference — small citation style */
+.newspaper-reference {
+  font-family: var(--font-body);
+  font-style: italic;
+  font-size: 0.72rem;
+  color: var(--color-ink-faded);
+  border-left: 2px solid var(--color-gold);
+  padding-left: 0.6rem;
+  margin: 0.75rem 0;
+  line-height: 1.4;
+}
+.dark .newspaper-reference {
+  color: var(--color-dark-ink-soft);
+}
+
+/* === VICTORIAN DECORATIVE ORNAMENTS === */
+
+/* Ornament container */
+.victorian-ornament {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  margin: 1.5rem 0;
+  color: var(--color-gold);
+  font-size: 1rem;
+  user-select: none;
+}
+.dark .victorian-ornament {
+  color: var(--color-dark-gold);
+}
+
+.victorian-ornament-line {
+  flex: 1;
+  max-width: 180px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--border-color) 30%, var(--border-color) 70%, transparent);
+}
+
+.victorian-ornament-cluster {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  letter-spacing: 0.3em;
+  white-space: nowrap;
+}
+
+/* Ink separator — thin decorative line with center symbol */
+.ink-separator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 1rem 0;
+  color: var(--color-ink-faded);
+  font-size: 0.85rem;
+  user-select: none;
+}
+.dark .ink-separator {
+  color: var(--color-dark-ink-soft);
+}
+.ink-separator::before,
+.ink-separator::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--border-color), transparent);
+  max-width: 120px;
+}
+.ink-separator::before { margin-right: 0.75rem; }
+.ink-separator::after { margin-left: 0.75rem; }
+
+/* Small star cluster ornament */
+.star-ornament {
+  text-align: center;
+  color: var(--color-gold);
+  font-size: 0.7rem;
+  letter-spacing: 0.5em;
+  margin: 1rem 0;
+  user-select: none;
+}
+.dark .star-ornament {
+  color: var(--color-dark-gold);
+}
+
+/* Tiny engraved icon label */
+.engraved-label {
+  font-family: var(--font-display);
+  font-size: 0.6rem;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: var(--color-ink-faded);
+  text-align: center;
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 0.15rem;
+  margin-bottom: 0.5rem;
+}
+.dark .engraved-label {
+  color: var(--color-dark-ink-soft);
+}
+
+/* === EDITION INFO — archive header === */
+
+.edition-info {
+  font-family: var(--font-sans);
+  font-size: 0.55rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--color-ink-faded);
+  text-align: right;
+  line-height: 1.5;
+}
+.dark .edition-info {
+  color: var(--color-dark-ink-soft);
+}
+.edition-info .edition-number {
+  color: var(--color-gold);
+  font-family: var(--font-display);
+  font-size: 0.8rem;
+  font-weight: 900;
+  letter-spacing: 0.02em;
+}
+.dark .edition-info .edition-number {
+  color: var(--color-dark-gold);
+}
+
+/* === ARCHIVE BROWSE — bound newspaper tabs === */
+
+.archive-tabs {
+  display: flex;
+  gap: 0;
+  overflow-x: auto;
+  white-space: nowrap;
+  border-bottom: 3px double var(--border-color);
+  padding-bottom: 0;
+}
+
+.archive-tab {
+  font-family: var(--font-sans);
+  font-size: 0.6rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  padding: 0.5rem 0.85rem;
+  color: var(--color-ink-faded);
+  cursor: pointer;
+  border: 1px solid var(--border-color);
+  border-bottom: none;
+  background: rgba(166, 124, 46, 0.03);
+  transition: all 0.15s ease;
+  position: relative;
+  flex-shrink: 0;
+}
+.archive-tab:hover {
+  background: rgba(166, 124, 46, 0.1);
+  color: var(--color-ink);
+}
+.archive-tab.active {
+  background: var(--paper-bg);
+  color: var(--color-ink);
+  font-weight: 900;
+  border-bottom: 3px solid var(--paper-bg);
+  margin-bottom: -3px;
+  z-index: 2;
+}
+.dark .archive-tab {
+  border-color: var(--color-dark-ink-soft);
+}
+.dark .archive-tab.active {
+  background: var(--color-dark-paper);
+  color: var(--color-dark-ink);
+  border-bottom-color: var(--color-dark-paper);
+}
+
+/* Bound newspaper spine effect */
+.archive-spine {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.4rem 0.75rem;
+  border: 1px solid var(--border-color);
+  border-left: 4px double var(--color-gold);
+  background: rgba(166, 124, 46, 0.04);
+  font-family: var(--font-sans);
+  font-size: 0.6rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--color-ink-faded);
+}
+.dark .archive-spine {
+  border-left-color: var(--color-dark-gold);
+  background: rgba(212, 168, 71, 0.04);
+}
+
+/* === EDITOR'S DISPATCH — handwritten style === */
+
+.editors-dispatch {
+  border: 1px solid var(--border-color);
+  padding: 0.85rem 1rem;
+  position: relative;
+  background: rgba(166, 124, 46, 0.02);
+}
+
+.editors-dispatch::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, transparent, var(--color-gold) 30%, var(--color-gold) 70%, transparent);
+  opacity: 0.5;
+}
+
+.editors-dispatch-title {
+  font-family: var(--font-headline);
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  color: var(--color-rust);
+  letter-spacing: 0.05em;
+  margin-bottom: 0.5rem;
+  text-align: center;
+}
+
+.editors-dispatch-body {
+  font-family: var(--font-old);
+  font-style: italic;
+  font-size: 0.82rem;
+  line-height: 1.5;
+  color: var(--color-ink-soft);
+  text-align: justify;
+  hyphens: auto;
+}
+.dark .editors-dispatch-body {
+  color: var(--color-dark-ink-soft);
+}
+
+.editors-dispatch-signature {
+  font-family: var(--font-old);
+  font-style: italic;
+  font-size: 0.75rem;
+  color: var(--color-rust);
+  text-align: right;
+  margin-top: 0.5rem;
+  padding-right: 0.5rem;
+}
+.dark .editors-dispatch-signature {
+  color: var(--color-dark-gold);
+}
+
+/* === TECHNICAL DIAGRAM — blueprint style === */
+
+.blueprint-diagram {
+  background:
+    linear-gradient(rgba(74, 44, 26, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(74, 44, 26, 0.03) 1px, transparent 1px);
+  background-size: 20px 20px;
+  border: 1px solid var(--border-color);
+  padding: 1rem;
+  position: relative;
+}
+.dark .blueprint-diagram {
+  background:
+    linear-gradient(rgba(212, 168, 71, 0.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(212, 168, 71, 0.02) 1px, transparent 1px);
+  background-size: 20px 20px;
+}
+
+.blueprint-diagram::before {
+  content: attr(data-title);
+  position: absolute;
+  top: -0.6rem;
+  left: 0.75rem;
+  background: var(--paper-bg);
+  padding: 0 0.5rem;
+  font-family: var(--font-sans);
+  font-size: 0.55rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--color-ink-faded);
+}
+.dark .blueprint-diagram::before {
+  background: var(--color-dark-paper);
+  color: var(--color-dark-ink-soft);
+}
+
+.blueprint-label {
+  font-family: var(--font-mono);
+  font-size: 0.5rem;
+  fill: var(--color-ink-faded);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.dark .blueprint-label {
+  fill: var(--color-dark-ink-soft);
+}
+
+.blueprint-line {
+  stroke: var(--color-ink-soft);
+  stroke-width: 0.5;
+  fill: none;
+  opacity: 0.6;
+}
+.dark .blueprint-line {
+  stroke: var(--color-dark-ink-soft);
+}
+
+/* === PAGE TURNING / MARAUDER'S MAP REVEAL === */
+
+/* Ink-seep reveal — content appears as ink spreading across parchment,
+   like a Marauder's Map being uncovered. Warm sepia glow fades to reveal. */
+@keyframes ink-seep-reveal {
+  0% {
+    opacity: 0;
+    filter: blur(6px) sepia(0.8) brightness(1.3);
+  }
+  30% {
+    opacity: 0.3;
+    filter: blur(3px) sepia(0.5) brightness(1.15);
+  }
+  60% {
+    opacity: 0.7;
+    filter: blur(1px) sepia(0.2) brightness(1.05);
+  }
+  100% {
+    opacity: 1;
+    filter: blur(0) sepia(0) brightness(1);
+  }
+}
+
+.article-unfold {
+  animation: ink-seep-reveal 0.8s ease-out forwards;
+  will-change: opacity, filter;
+}
+
+/* Fold back — content fades back into the parchment */
+@keyframes ink-seep-reverse {
+  0% {
+    opacity: 1;
+    filter: blur(0) sepia(0) brightness(1);
+  }
+  100% {
+    opacity: 0;
+    filter: blur(4px) sepia(0.4) brightness(1.1);
+  }
+}
+
+.article-fold-back {
+  animation: ink-seep-reverse 0.5s ease-in forwards;
+}
+
+/* === AMBIENT SOUND TOGGLE === */
+.sound-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.2rem 0.4rem;
+  border: 1px solid var(--border-color);
+  background: transparent;
+  cursor: pointer;
+  font-family: var(--font-sans);
+  font-size: 0.5rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--color-ink-faded);
+  transition: all 0.15s ease;
+}
+.sound-toggle:hover {
+  color: var(--color-ink);
+  border-color: var(--color-gold);
+}
+.sound-toggle.active {
+  color: var(--color-gold);
+  border-color: var(--color-gold);
+  background: rgba(166, 124, 46, 0.05);
+}
+.dark .sound-toggle.active {
+  color: var(--color-dark-gold);
+  border-color: var(--color-dark-gold);
+}
+
+/* === REDUCED MOTION — comprehensive === */
+@media (prefers-reduced-motion: reduce) {
+  .ink-reveal-headline,
+  .ink-reveal-rule,
+  .ink-reveal-border,
+  .ink-reveal-body,
+  .ink-reveal-section,
+  .print-misalign,
+  .print-noise,
+  .article-unfold,
+  .article-fold-back,
+  .paper-settle {
+    animation: none !important;
+    opacity: 1 !important;
+    filter: none !important;
+    transform: none !important;
+  }
+  .ink-illustration,
+  .ink-illustration-frame,
+  .newspaper-story,
+  .headline,
+  .headline-masthead,
+  .pull-quote,
+  .ornament-divider {
+    transition: none !important;
+  }
+  .ink-illustration:hover {
+    transform: none !important;
+  }
+  .paper-3d-surface {
+    transform: none !important;
+  }
+}/* === LAZY ILLUSTRATION — pause animations when off-screen === */
+.paused-anim svg * {
+  animation-play-state: paused !important;
+}
+
+/* === ARTICLE UNFOLD WRAPPER === */
+.article-unfold-wrapper {
+  position: relative;
+  perspective: 2000px;
+}/* === SEARCH INK-APPEARING EFFECT === */
+@keyframes search-ink-appear {
+  0% {
+    opacity: 0;
+    filter: blur(1px);
+    text-shadow: 0 0 4px var(--color-ink);
+  }
+  100% {
+    opacity: 1;
+    filter: blur(0);
+    text-shadow: none;
+  }
+}
+
+.search-ink-result {
+  animation: search-ink-appear 0.6s ease-out forwards;
+}
+
+/* === SCROLL SETTLE — newspaper gently settles after scrolling stops === */
+@keyframes paper-settle-shadow {
+  0% {
+    box-shadow: 0 0 0 rgba(74, 44, 26, 0);
+  }
+  30% {
+    box-shadow: 0 2px 14px rgba(74, 44, 26, 0.04);
+  }
+  100% {
+    box-shadow: 0 0 0 rgba(74, 44, 26, 0);
+  }
+}
+
+.paper-settle {
+  animation: paper-settle-shadow 0.5s ease-out;
+}
+
+/* === MAGICAL HOVER EFFECTS — ink bloom, warm glow, sepia intensify === */
+
+/* Newspaper stories — subtle warm glow on hover, border deepens */
+.newspaper-story {
+  transition: background-color 0.35s ease, box-shadow 0.35s ease;
+}
+.newspaper-story:hover {
+  background-color: rgba(166, 124, 46, 0.03);
+  box-shadow: 0 1px 4px rgba(74, 44, 26, 0.04);
+}
+
+/* Headlines — ink bloom (warm text-shadow) on hover */
+.newspaper-story .headline {
+  transition: text-shadow 0.3s ease, color 0.3s ease;
+}
+.newspaper-story:hover .headline {
+  text-shadow: 0 0 2px rgba(74, 44, 26, 0.15);
+}
+
+/* Article links — ink-spread underline draws in on hover */
+.newspaper-story .headline a {
+  position: relative;
+  text-decoration: none;
+}
+.newspaper-story .headline a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -1px;
+  width: 0;
+  height: 1px;
+  background: var(--color-ink);
+  transition: width 0.35s ease;
+}
+.newspaper-story .headline a:hover::after {
+  width: 100%;
+}
+
+/* Illustrations — sepia intensifies, slight scale on hover */
+.ink-illustration {
+  transition: filter 0.4s ease, transform 0.4s ease;
+}
+.ink-illustration:hover {
+  transform: scale(1.015);
+  filter:
+    sepia(0.8)
+    contrast(1.5)
+    saturate(0.2)
+    brightness(0.88);
+}
+.dark .ink-illustration:hover {
+  filter:
+    sepia(0.5)
+    contrast(1.3)
+    saturate(0.15)
+    brightness(0.8);
+}
+
+/* Illustration frame — warm inset glow on hover */
+.ink-illustration-frame {
+  transition: box-shadow 0.4s ease;
+}
+.ink-illustration-frame:hover {
+  box-shadow:
+    inset 0 0 6px rgba(166, 124, 46, 0.15),
+    0 1px 0 rgba(74, 44, 26, 0.1);
+}
+
+/* Front page hero headline — extra warm glow on hover */
+.headline-masthead {
+  transition: text-shadow 0.4s ease;
+}
+.headline-masthead:hover {
+  text-shadow: 0 0 4px rgba(166, 124, 46, 0.1);
+}
+
+/* Pull quotes — subtle warm shift on hover */
+.pull-quote {
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+.pull-quote:hover {
+  border-color: var(--color-gold);
+  box-shadow: 0 0 8px rgba(166, 124, 46, 0.05);
+}
+
+/* Decorative ornaments — subtle brightness pulse on hover */
+.ornament-divider {
+  transition: opacity 0.3s ease;
+}
+.ornament-divider:hover {
+  opacity: 0.85;
+}

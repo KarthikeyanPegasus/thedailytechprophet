@@ -1,0 +1,17 @@
+{
+  "name": "The Daily Tech Prophet",
+  "short_name": "Tech Prophet",
+  "description": "An immersive, cinematic technology newspaper with a magical Victorian twist.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f4ecd8",
+  "theme_color": "#b8923a",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}

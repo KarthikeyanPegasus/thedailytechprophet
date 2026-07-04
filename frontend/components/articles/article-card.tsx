@@ -1,0 +1,61 @@
+"use client";
+
+import Link from "next/link";
+import { motion } from "framer-motion";
+import type { Article } from "@/types";
+import { LivingIllustration } from "@/components/images/illustration-picker";
+import { timeAgo, articleFirstParagraph, headlineClamp } from "@/lib/utils";
+
+interface ArticleCardProps {
+  article: Article;
+  variant?: "default" | "compact" | "vertical";
+  index?: number;
+}
+
+export function ArticleCard({ article, variant = "default", index = 0 }: ArticleCardProps) {
+  const isCompact = variant === "compact";
+  const excerpt = articleFirstParagraph(article, isCompact ? 180 : 240);
+
+  return (
+    <motion.article
+      initial={{ opacity: 0 }}
+      whileInView={{ opacity: 1 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.35, delay: Math.min(index * 0.03, 0.3) }}
+      className="newspaper-story break-inside-avoid"
+    >
+      <p className="kicker text-[var(--ink)] mb-0.5">
+        {article.categories.slice(0, 2).map((cat) => cat.replace(/-/g, " ")).join(" · ")}
+      </p>
+
+      <div className="flex items-start gap-2">
+        {!isCompact && (
+          <div className="inline-illustration flex-shrink-0">
+            <LivingIllustration article={article} imageUrl={article.image_url} className="w-full h-full" />
+          </div>
+        )}
+        <h3
+          className={`headline text-ink hover:text-brown transition-colors flex-1 min-w-0 leading-[1.1] ${
+            isCompact ? "text-[0.9rem]" : "text-lg sm:text-xl"
+          }`}
+        >
+          <Link href={`/article/${article.id}`} className="focus:outline-none">
+            {headlineClamp(article.title, isCompact ? 100 : 130)}
+          </Link>
+        </h3>
+      </div>
+
+      <p
+        className="body-text text-ink-soft mt-2"
+        style={{ fontSize: isCompact ? "0.78rem" : "0.85rem", lineHeight: 1.55 }}
+      >
+        {excerpt}
+      </p>
+
+      <p className="byline-text">
+        <span>By {article.author}</span>
+        <span>{timeAgo(article.published_at)} · {article.read_time}m</span>
+      </p>
+    </motion.article>
+  );
+}

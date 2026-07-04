@@ -1,0 +1,38 @@
+# Go build artifacts
+/server
+/server.exe
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+
+# Test binaries and output
+*.test
+*.out
+
+# Coverage and profiling
+*.coverprofile
+coverage.txt
+*.prof
+
+# Go workspace files
+go.work
+go.work.sum
+
+# Vendor (uncomment if vendoring is used)
+# vendor/
+
+# Local environment files
+.env
+.env.local
+.env.*.local
+
+# IDE
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
