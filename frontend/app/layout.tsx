@@ -91,7 +91,7 @@ export default function RootLayout({
       className={`${playfair.variable} ${garamond.variable} ${inter.variable} ${jetbrains.variable} ${unifraktur.variable} ${oldStandard.variable} ${crimson.variable}`}
       suppressHydrationWarning
     >
-      <body className="paper-texture paper-edges paper-foxing paper-fibers paper-aged-corners ink-specks min-h-screen font-body antialiased">
+      <body className="paper-texture paper-edges min-h-screen font-body antialiased">
         <ThemeProvider>
           <GlobalEffects />
           <KeyboardShortcuts />

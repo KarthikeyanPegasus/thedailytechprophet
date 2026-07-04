@@ -2,6 +2,7 @@
 
 import type { Article } from "@/types";
 import { LivingIllustration } from "@/components/images/illustration-picker";
+import { useLazyIllustration } from "@/hooks/use-lazy-illustration";
 import { timeAgo, articleFirstParagraph, headlineClamp } from "@/lib/utils";
 import Link from "next/link";
 
@@ -77,6 +78,7 @@ function NewspaperStory({
   isFiller: boolean;
 }) {
   const excerpt = articleFirstParagraph(article, compact ? 220 : 280);
+  const { ref: illRef, shouldRender, isVisible } = useLazyIllustration<HTMLDivElement>();
 
   if (isFiller && compact) {
     return (
@@ -102,8 +104,12 @@ function NewspaperStory({
 
       <div className="flex items-start gap-2">
         {showImage && (
-          <div className="inline-illustration flex-shrink-0" style={{ width: "44px", height: "44px" }}>
-            <LivingIllustration article={article} imageUrl={article.image_url} className="w-full h-full" />
+          <div ref={illRef} className={`inline-illustration flex-shrink-0 ${isVisible ? "" : "paused-anim"}`} style={{ width: "44px", height: "44px" }}>
+            {shouldRender ? (
+              <LivingIllustration article={article} imageUrl={article.image_url} className="w-full h-full" />
+            ) : (
+              <div className="w-full h-full" />
+            )}
           </div>
         )}
         <h3

@@ -3,12 +3,14 @@
 import { useEffect, useRef } from "react";
 
 /**
- * PaperPhysics — scroll parallax (translateY) + mouse-move paper tilt
- * (max 2° 2D rotation) + scroll-settle effect.
+ * PaperPhysics — scroll parallax (translateY) + scroll-settle effect.
  *
  * Uses only 2D transforms to avoid the compositing-layer repaint issues
- * that 3D perspective caused during fast scroll. Mouse tilt is disabled
- * while scrolling is active, then re-enabled after scroll settles.
+ * that 3D perspective caused during fast scroll.
+ *
+ * The RAF loop is **idle-aware**: it only runs while the parallax offset
+ * is still converging. Once it has settled the transform is cleared to
+ * `none` and the loop is cancelled — zero cost when idle.
  *
  * Respects prefers-reduced-motion.
  */
@@ -33,12 +35,38 @@ export function PaperPhysics() {
     let targetOffset = 0;
     let raf = 0;
     let ticking = false;
+    let loopActive = false;
 
-    // --- Tilt state ---
-    let isScrolling = false;
-    let mouseEnabled = true;
-    let mouseRaf = 0;
-    let scrollEndTimer: ReturnType<typeof setTimeout> | null = null;
+    // Threshold below which we consider the surface "settled" and stop animating.
+    const SETTLE_THRESHOLD = 0.05;
+
+    const startLoop = () => {
+      if (loopActive) return;
+      loopActive = true;
+      raf = requestAnimationFrame(animate);
+    };
+
+    // Animation loop — translates the surface for parallax.
+    // Self-cancels once the offset has settled to avoid a permanent
+    // 60fps transform-write on the entire <main> element.
+    const animate = () => {
+      currentOffset += (targetOffset - currentOffset) * 0.06;
+
+      const offsetDelta = Math.abs(targetOffset - currentOffset);
+
+      if (offsetDelta < SETTLE_THRESHOLD) {
+        // Snap to final value and release the transform so the browser
+        // can skip compositing the layer entirely while idle.
+        currentOffset = targetOffset;
+        surface.style.transform = currentOffset === 0 ? "" : `translateY(${currentOffset}px)`;
+        raf = 0;
+        loopActive = false;
+        return;
+      }
+
+      surface.style.transform = `translateY(${currentOffset}px)`;
+      raf = requestAnimationFrame(animate);
+    };
 
     const onScroll = () => {
       if (ticking) return;
@@ -46,64 +74,28 @@ export function PaperPhysics() {
       // Tiny parallax — max 3px shift
       targetOffset = window.scrollY * 0.003;
 
-      // Disable mouse tilt during active scroll
-      if (!isScrolling) {
-        isScrolling = true;
-        mouseEnabled = false;
-        // Gently return tilt to zero
-        surface.style.setProperty("--paper-tilt", "0");
-      }
+      // Trigger the settle animation
+      surface.classList.add("paper-settle");
+      // Defer the class removal to the next frame so the animation can play.
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          surface.classList.remove("paper-settle");
+        });
+      });
 
-      // Reset scroll-end timer — fires after scrolling stops
-      if (scrollEndTimer) clearTimeout(scrollEndTimer);
-      scrollEndTimer = setTimeout(() => {
-        isScrolling = false;
-        mouseEnabled = true;
-        // Trigger the settle animation
-        surface.classList.add("paper-settle");
-        setTimeout(() => surface.classList.remove("paper-settle"), 600);
-      }, 150);
+      startLoop();
 
       requestAnimationFrame(() => {
         ticking = false;
       });
     };
 
-    // Animation loop — combines translateY parallax + 2D rotate tilt
-    const animate = () => {
-      currentOffset += (targetOffset - currentOffset) * 0.06;
-      const tilt = surface.style.getPropertyValue("--paper-tilt") || "0";
-      surface.style.transform = `translateY(${currentOffset}px) rotate(${tilt}deg)`;
-      raf = requestAnimationFrame(animate);
-    };
-
-    // --- Mouse tilt — very subtle 2D rotation, max 2 degrees ---
-    const onMouseMove = (e: MouseEvent) => {
-      if (!mouseEnabled) return;
-      if (mouseRaf) return;
-      mouseRaf = requestAnimationFrame(() => {
-        mouseRaf = 0;
-        // Normalise mouse position relative to viewport centre (-1 to 1)
-        const cx = window.innerWidth / 2;
-        const dx = (e.clientX - cx) / cx;
-        // Max 2 degrees of tilt
-        const tilt = Math.max(-2, Math.min(2, dx * 2));
-        surface.style.setProperty("--paper-tilt", tilt.toFixed(2));
-      });
-    };
-
     window.addEventListener("scroll", onScroll, { passive: true });
-    window.addEventListener("mousemove", onMouseMove, { passive: true });
-    raf = requestAnimationFrame(animate);
 
     return () => {
       window.removeEventListener("scroll", onScroll);
-      window.removeEventListener("mousemove", onMouseMove);
-      cancelAnimationFrame(raf);
-      if (mouseRaf) cancelAnimationFrame(mouseRaf);
-      if (scrollEndTimer) clearTimeout(scrollEndTimer);
+      if (raf) cancelAnimationFrame(raf);
       surface.style.transform = "";
-      surface.style.removeProperty("--paper-tilt");
       surface.classList.remove("paper-settle");
     };
   }, []);

@@ -1,0 +1,57 @@
+# docker-compose.yml — The Daily Tech Prophet full stack
+#
+# Usage:
+#   cp .env.docker.example .env.docker
+#   (edit .env.docker as needed)
+#   docker compose --env-file .env.docker up --build
+#
+# Once running:
+#   Frontend:  http://localhost:3000
+#   Backend:   http://localhost:8080
+
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: prophet-backend
+    ports:
+      - "${BACKEND_PORT:-8080}:8080"
+    environment:
+      PORT: 8080
+      GITHUB_TOKEN: ${GITHUB_TOKEN:-}
+      ACTIVE_PROVIDERS: ${ACTIVE_PROVIDERS:-rss,hackernews,reddit}
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "-q", "http://localhost:8080/api/health"]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      args:
+        # Baked into the client bundle at build time so browser fetches
+        # resolve to the externally-accessible backend port.
+        NEXT_PUBLIC_API_URL: "http://localhost:${BACKEND_PORT:-8080}"
+    container_name: prophet-frontend
+    ports:
+      - "${FRONTEND_PORT:-3000}:3000"
+    environment:
+      # Server-side fetches inside the Next.js standalone server use this
+      # to reach the backend over the internal Docker network.
+      API_URL: "http://backend:8080"
+      NODE_ENV: production
+    depends_on:
+      backend:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "-q", "http://localhost:3000/"]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+      start_period: 15s
+    restart: unless-stopped

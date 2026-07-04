@@ -27,7 +27,7 @@ export function InkTrail() {
       canvas.height = window.innerHeight * dpr;
       canvas.style.width = `${window.innerWidth}px`;
       canvas.style.height = `${window.innerHeight}px`;
-      ctx.scale(dpr, dpr);
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     };
     resize();
     window.addEventListener("resize", resize);
@@ -37,6 +37,14 @@ export function InkTrail() {
     let lastY = 0;
     let isMoving = false;
     let moveTimer: ReturnType<typeof setTimeout>;
+    let raf = 0;
+    let loopActive = false;
+
+    const startLoop = () => {
+      if (loopActive) return;
+      loopActive = true;
+      raf = requestAnimationFrame(animate);
+    };
 
     const onMouseMove = (e: MouseEvent) => {
       lastX = e.clientX;
@@ -58,13 +66,14 @@ export function InkTrail() {
           });
         }
       }
+      startLoop();
     };
 
     window.addEventListener("mousemove", onMouseMove);
 
-    let raf = 0;
+    // Only render while particles exist; cancels once all have decayed.
     const animate = () => {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
 
       const isDark = document.documentElement.classList.contains("dark");
       const inkColor = isDark ? "212, 168, 71" : "74, 44, 26";
@@ -85,17 +94,23 @@ export function InkTrail() {
         ctx.beginPath();
         ctx.arc(p.x, p.y, size, 0, Math.PI * 2);
         ctx.fillStyle = `rgba(${inkColor}, ${alpha})`;
-      ctx.fill();
+        ctx.fill();
+      }
+
+      if (particles.length === 0) {
+        // Nothing to draw — stop the loop until the next mousemove.
+        raf = 0;
+        loopActive = false;
+        return;
       }
 
       raf = requestAnimationFrame(animate);
     };
-    raf = requestAnimationFrame(animate);
 
     return () => {
       window.removeEventListener("mousemove", onMouseMove);
       window.removeEventListener("resize", resize);
-      cancelAnimationFrame(raf);
+      if (raf) cancelAnimationFrame(raf);
       clearTimeout(moveTimer);
     };
   }, []);

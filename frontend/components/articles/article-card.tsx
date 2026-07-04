@@ -4,6 +4,7 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import type { Article } from "@/types";
 import { LivingIllustration } from "@/components/images/illustration-picker";
+import { useLazyIllustration } from "@/hooks/use-lazy-illustration";
 import { timeAgo, articleFirstParagraph, headlineClamp } from "@/lib/utils";
 
 interface ArticleCardProps {
@@ -15,6 +16,7 @@ interface ArticleCardProps {
 export function ArticleCard({ article, variant = "default", index = 0 }: ArticleCardProps) {
   const isCompact = variant === "compact";
   const excerpt = articleFirstParagraph(article, isCompact ? 180 : 240);
+  const { ref: illRef, shouldRender, isVisible } = useLazyIllustration<HTMLDivElement>();
 
   return (
     <motion.article
@@ -30,8 +32,12 @@ export function ArticleCard({ article, variant = "default", index = 0 }: Article
 
       <div className="flex items-start gap-2">
         {!isCompact && (
-          <div className="inline-illustration flex-shrink-0">
-            <LivingIllustration article={article} imageUrl={article.image_url} className="w-full h-full" />
+          <div ref={illRef} className={`inline-illustration flex-shrink-0 ${isVisible ? "" : "paused-anim"}`}>
+            {shouldRender ? (
+              <LivingIllustration article={article} imageUrl={article.image_url} className="w-full h-full" />
+            ) : (
+              <div className="w-full h-full" />
+            )}
           </div>
         )}
         <h3
