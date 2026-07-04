@@ -180,7 +180,7 @@ export default function HomePage() {
 
                 {aroundTheRealm.length > 0 && (
                   <DeferredRender margin="400px" placeholderHeight="600px">
-                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 items-start">
+                    <div className="grid cv-auto grid-cols-1 lg:grid-cols-12 gap-4 items-start">
                       <div className="lg:col-span-9">
                         <NewspaperSection
                           title="Around the Realm"

@@ -1,45 +1,26 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import type { RefObject } from "react";
+import { useSharedIllustration } from "@/hooks/use-shared-illustration-observer";
 
 /**
- * useLazyIllustration — IntersectionObserver-based lazy mount for illustrations.
- * Only mounts the illustration when it enters the viewport.
- * Pauses CSS animations when off-screen by toggling a class.
+ * useLazyIllustration — backward-compatible wrapper around the
+ * module-scoped shared IntersectionObserver.
+ *
+ * Previously each call created its own IntersectionObserver, which was
+ * the dominant Layout/IntersectionObserver cost in the profile (~30+
+ * observers on the home page). Now every call subscribes to a single
+ * shared observer instance.
  *
  * Usage:
  * const { ref, shouldRender, isVisible } = useLazyIllustration<HTMLDivElement>();
- *
- * if (!shouldRender) return <div ref={ref} className={className} />;
- * return <div ref={ref} className={cn(className, isVisible ? "" : "paused-anim")}><Illustration /></div>;
  */
-export function useLazyIllustration<T extends HTMLElement = HTMLDivElement>(rootMargin = "200px") {
-  const ref = useRef<T>(null);
-  const [shouldRender, setShouldRender] = useState(false);
-  const [isVisible, setIsVisible] = useState(false);
-
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-    const el = ref.current;
-    if (!el) return;
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        for (const entry of entries) {
-          if (entry.isIntersecting) {
-            setShouldRender(true);
-            setIsVisible(true);
-          } else {
-            setIsVisible(false);
-          }
-        }
-      },
-      { rootMargin }
-    );
-
-    observer.observe(el);
-    return () => observer.disconnect();
-  }, [rootMargin]);
-
-  return { ref, shouldRender, isVisible };
+export function useLazyIllustration<T extends HTMLElement = HTMLDivElement>(
+  rootMargin = "200px",
+): {
+  ref: RefObject<T | null>;
+  shouldRender: boolean;
+  isVisible: boolean;
+} {
+  return useSharedIllustration<T>(rootMargin);
 }

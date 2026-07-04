@@ -1,12 +1,14 @@
 "use client";
 
-import { useEffect, useRef, useState, type ReactNode } from "react";
+import { type ReactNode } from "react";
+import { useSharedIllustration } from "@/hooks/use-shared-illustration-observer";
 
 /**
  * DeferredRender — only mounts its children when the placeholder scrolls
- * within `margin` pixels of the viewport. This avoids rendering hundreds of
- * DOM nodes and animation observers for below-the-fold content on initial
- * load. A single shared IntersectionObserver per instance.
+ * within `margin` pixels of the viewport. Uses a module-scoped shared
+ * IntersectionObserver (see use-shared-illustration-observer) so the
+ * entire page has at most one observer instance regardless of how many
+ * DeferredRender or useLazyIllustration components are mounted.
  *
  * Once revealed, children stay mounted (no unmount on scroll away).
  */
@@ -21,29 +23,9 @@ export function DeferredRender({
   placeholderHeight?: string;
   className?: string;
 }) {
-  const ref = useRef<HTMLDivElement>(null);
-  const [visible, setVisible] = useState(false);
+  const { ref, shouldRender } = useSharedIllustration<HTMLDivElement>(margin);
 
-  useEffect(() => {
-    if (visible) return;
-    const el = ref.current;
-    if (!el) return;
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (entries[0]?.isIntersecting) {
-          setVisible(true);
-          observer.disconnect();
-        }
-      },
-      { rootMargin: margin },
-    );
-
-    observer.observe(el);
-    return () => observer.disconnect();
-  }, [visible, margin]);
-
-  if (visible) {
+  if (shouldRender) {
     return <div className={className}>{children}</div>;
   }
 
